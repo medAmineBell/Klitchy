@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:klitchyapp/models/table.dart';
+import 'package:klitchyapp/models/tableResto.dart';
 
 class ScannedTableScreen extends StatefulWidget {
   final TableResto tableResto;
