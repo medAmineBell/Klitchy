@@ -2,8 +2,8 @@ class Order {
   String id;
   String name;
   String total;
-  String paymentMethod;
   String status;
+  String foodID;
   String clientID;
   String restoID;
   String tableID;
@@ -12,8 +12,8 @@ class Order {
     required this.id,
     required this.name,
     required this.total,
-    required this.paymentMethod,
     required this.status,
+    required this.foodID,
     required this.clientID,
     required this.restoID,
     required this.tableID,

@@ -7,6 +7,7 @@ class Table {
   String status;
   String total;
   String restoID;
+  bool isSplit;
 
   Table({
     required this.id,
@@ -16,6 +17,7 @@ class Table {
     required this.qrcode,
     required this.status,
     required this.total,
+    required this.isSplit,
     required this.restoID,
   });
 }
