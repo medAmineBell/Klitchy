@@ -1,4 +1,4 @@
-class Table {
+class TableResto {
   String id;
   String name;
   String clients;
@@ -9,7 +9,7 @@ class Table {
   String restoID;
   bool isSplit;
 
-  Table({
+  TableResto({
     required this.id,
     required this.name,
     required this.clients,

@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primaryColor: Colors.teal,
         ),
-        home: ScannedTableScreen(),
+        home: HomeScreen(),
       ),
     );
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/models/table.dart';
 
 class ScannedTableScreen extends StatefulWidget {
-  const ScannedTableScreen({Key? key}) : super(key: key);
+  final TableResto tableResto;
+  const ScannedTableScreen({Key? key, required this.tableResto})
+      : super(key: key);
 
   @override
   State<ScannedTableScreen> createState() => _ScannedTableScreenState();
