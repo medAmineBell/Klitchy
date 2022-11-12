@@ -5,7 +5,7 @@ class TableResto {
   String owner;
   String qrcode;
   String status;
-  String total;
+  double total;
   String restoID;
   bool isSplit;
 

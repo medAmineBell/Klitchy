@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/models/tableResto.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/scanned_table_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -61,7 +64,25 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                     margin: EdgeInsets.all(8),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        //Navigator.of(context).pop();
+                        TableResto tableResto = TableResto(
+                            id: "1",
+                            name: "20",
+                            clients: "amine,kissa",
+                            owner: "amine",
+                            qrcode: "dskgdsjgdjsgkkdsgh",
+                            status: "reserved",
+                            total: 22.50,
+                            isSplit: false,
+                            restoID: "1");
+                        Provider.of<DataProvider>(context, listen: false)
+                            .setTableResto(tableResto);
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ScannedTableScreen(tableResto: tableResto),
+                          ),
+                        );
                       },
                       child: Text(
                         "Annuler",

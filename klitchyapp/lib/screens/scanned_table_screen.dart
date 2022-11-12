@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/home_screen.dart';
+import 'package:klitchyapp/screens/resto_screen.dart';
+import 'package:provider/provider.dart';
 
 class ScannedTableScreen extends StatefulWidget {
   final TableResto tableResto;
@@ -13,6 +18,13 @@ class ScannedTableScreen extends StatefulWidget {
 class _ScannedTableScreenState extends State<ScannedTableScreen> {
   TextEditingController telcontroller = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
+  late Resto resto;
+
+  @override
+  void initState() {
+    super.initState();
+    resto = Provider.of<DataProvider>(context, listen: false).resto;
+  }
 
   bool _validtel = false;
   bool _validname = false;
@@ -26,11 +38,19 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
         SizedBox(
           height: 50,
         ),
-        Text("Plan B"),
+        Text(resto.name),
         SizedBox(
           height: 30,
         ),
-        Text("Table: 20"),
+        Text("Table: " + widget.tableResto.name),
+        SizedBox(
+          height: 30,
+        ),
+        Text("Owner: " + widget.tableResto.owner),
+        SizedBox(
+          height: 30,
+        ),
+        Text("Total: " + widget.tableResto.total.toStringAsFixed(2)),
         Padding(
           padding: const EdgeInsets.all(10),
           child: TextFormField(
@@ -93,7 +113,15 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
                     : _validname = false;
               });
               if (telcontroller.text.isNotEmpty &&
-                  namecontroller.text.isNotEmpty) {}
+                  namecontroller.text.isNotEmpty) {
+                Provider.of<DataProvider>(context, listen: false)
+                    .setClient(namecontroller.text, telcontroller.text);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomeScreen(),
+                  ),
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
                 primary: Colors.teal,

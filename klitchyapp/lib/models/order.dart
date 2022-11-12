@@ -1,7 +1,7 @@
 class Order {
   String id;
   String name;
-  String total;
+  double total;
   String status;
   String foodID;
   String clientID;

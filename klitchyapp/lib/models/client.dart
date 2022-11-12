@@ -5,7 +5,7 @@ class Client {
   String tableID;
 
   Client({
-    required this.id,
+    this.id = "",
     required this.name,
     required this.phone,
     this.tableID = "",

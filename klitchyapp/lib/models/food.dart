@@ -1,7 +1,7 @@
 class Food {
   String id;
   String name;
-  String price;
+  double price;
   String imgurl;
   String description;
   String restoID;

@@ -1,67 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:klitchyapp/screens/barecode_scan_screen.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/cart_screen.dart';
+import 'package:klitchyapp/screens/orders_screen.dart';
+import 'package:klitchyapp/screens/profile_screen.dart';
+import 'package:klitchyapp/screens/resto_screen.dart';
+import 'package:klitchyapp/screens/table_screen.dart';
+import 'package:klitchyapp/widgets/fab_bottom_app_bar.dart';
 import 'package:provider/provider.dart';
-//import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var currentIndex = 0;
+  late PageController pageController;
+
   @override
   void initState() {
     super.initState();
+    pageController = PageController();
   }
 
-  // launchURL(String url) async {
-  //   if (await canLaunchUrl(Uri.parse(url))) {
-  //     await launchUrl(Uri.parse(url));
-  //   } else {
-  //     throw 'Impossible de trouver $url';
-  //   }
-  // }
+  void changePage(int index) {
+    setState(() {
+      currentIndex = index;
+      pageController.animateToPage(index,
+          duration: Duration(milliseconds: 100), curve: Curves.bounceIn);
+    });
+  }
+
+  void _selectedTab(int index) {
+    setState(() {
+      if (currentIndex != index) {
+        pageController.jumpToPage(index);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: 0,
-        automaticallyImplyLeading: false,
+      body: PageView(
+        controller: pageController,
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          RestoScreen(),
+          TableScreen(),
+          OrdersScreen(),
+          ProfileScreen(),
+        ],
+        onPageChanged: (int index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
       ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => BarecodeScanScreen()));
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                ),
-                icon: Icon(Icons.qr_code_2, size: 30, color: Colors.teal),
-                label: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                  child: Text(
-                    "Scannez le QR code",
-                    style: TextStyle(
-                        color: Colors.teal,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )),
-          ],
+      floatingActionButton: FloatingActionButton(
+        //mini: true,
+        child: Icon(
+          Icons.shopping_cart_outlined,
+          size: 35,
         ),
+        backgroundColor: Colors.teal,
+        elevation: 4,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => CartScreen()));
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: FABBottomAppBar(
+        color: Colors.black,
+        selectedColor: Colors.white,
+        notchedShape: const CircularNotchedRectangle(),
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.6),
+        onTabSelected: _selectedTab,
+        items: [
+          FABBottomAppBarItem(
+            iconData: Icons.menu_book,
+            text: 'Menu',
+          ),
+          FABBottomAppBarItem(
+            iconData: Icons.table_restaurant_outlined,
+            text: 'Table',
+          ),
+          FABBottomAppBarItem(
+            iconData: Icons.view_list_outlined,
+            text: 'Orders',
+          ),
+          FABBottomAppBarItem(
+            iconData: Icons.person,
+            text: 'Profile',
+          ),
+        ],
+        centerItemText: '',
       ),
     );
   }

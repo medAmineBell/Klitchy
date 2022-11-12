@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/barecode_scan_screen.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
+import 'package:klitchyapp/screens/into_screen.dart';
 import 'package:klitchyapp/screens/scanned_table_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primaryColor: Colors.teal,
         ),
-        home: HomeScreen(),
+        home: IntroScreen(),
       ),
     );
   }
