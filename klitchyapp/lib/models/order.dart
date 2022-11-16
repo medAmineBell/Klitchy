@@ -3,19 +3,19 @@ class Order {
   String name;
   double total;
   String status;
-  String foodID;
-  String clientID;
-  String restoID;
-  String tableID;
+  String foodId;
+  String clientId;
+  String restoId;
+  String tableId;
 
   Order({
     required this.id,
     required this.name,
     required this.total,
     required this.status,
-    required this.foodID,
-    required this.clientID,
-    required this.restoID,
-    required this.tableID,
+    required this.foodId,
+    required this.clientId,
+    required this.restoId,
+    required this.tableId,
   });
 }

@@ -74,7 +74,7 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                             status: "reserved",
                             total: 22.50,
                             isSplit: false,
-                            restoID: "1");
+                            restoId: "1");
                         Provider.of<DataProvider>(context, listen: false)
                             .setTableResto(tableResto);
                         Navigator.of(context).pushReplacement(

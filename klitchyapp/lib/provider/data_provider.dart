@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:klitchyapp/models/category.dart';
@@ -30,5 +32,28 @@ class DataProvider with ChangeNotifier {
   void setClient(String name, String phone) {
     Client c = Client(name: name, phone: phone);
     client = c;
+  }
+
+  Future<void> getTableByQrCode(String code) async {
+    const url = 'http://localhost/api/getTable';
+
+    final response = await http.post(Uri.parse(url), body: {"qrcode": code});
+
+    try {
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      //final userData = extractedData['user'];
+      if (extractedData != null) {
+        // user.id = userData["id"].toString();
+        // user.fname = userData["first_name"];
+        // user.lname = userData["last_name"];
+        // user.email = userData["email"];
+        // user.role = userData["role"];
+        // user.phone = userData["phone_number"];
+        // user.avatar = userData["avatar"];
+        // user.emailVerifiedAt = userData["email_verified_at"];
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

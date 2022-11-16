@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       currentIndex = index;
       pageController.animateToPage(index,
-          duration: Duration(milliseconds: 100), curve: Curves.bounceIn);
+          duration: const Duration(milliseconds: 100), curve: Curves.bounceIn);
     });
   }
 
@@ -45,8 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: PageView(
         controller: pageController,
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
+        physics: const NeverScrollableScrollPhysics(),
+        children: const <Widget>[
           RestoScreen(),
           TableScreen(),
           OrdersScreen(),
@@ -60,16 +60,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         //mini: true,
-        child: Icon(
-          Icons.shopping_cart_outlined,
-          size: 35,
-        ),
         backgroundColor: Colors.teal,
         elevation: 4,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => CartScreen()));
+              builder: (BuildContext context) => const CartScreen()));
         },
+        //mini: true,
+        child: const Icon(
+          Icons.shopping_cart_outlined,
+          size: 35,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: FABBottomAppBar(

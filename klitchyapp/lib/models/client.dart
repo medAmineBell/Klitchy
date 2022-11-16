@@ -2,12 +2,12 @@ class Client {
   String id;
   String name;
   String phone;
-  String tableID;
+  String tableId;
 
   Client({
     this.id = "",
     required this.name,
     required this.phone,
-    this.tableID = "",
+    this.tableId = "",
   });
 }

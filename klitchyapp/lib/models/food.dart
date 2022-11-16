@@ -4,8 +4,8 @@ class Food {
   double price;
   String imgurl;
   String description;
-  String restoID;
-  String categoryID;
+  String restoId;
+  String categoryId;
 
   Food({
     required this.id,
@@ -13,7 +13,7 @@ class Food {
     required this.price,
     required this.imgurl,
     required this.description,
-    required this.restoID,
-    required this.categoryID,
+    required this.restoId,
+    required this.categoryId,
   });
 }

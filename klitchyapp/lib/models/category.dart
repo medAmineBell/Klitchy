@@ -2,12 +2,12 @@ class Category {
   String id;
   String name;
   String imgurl;
-  String restoID;
+  String restoId;
 
   Category({
     required this.id,
     required this.name,
     required this.imgurl,
-    required this.restoID,
+    required this.restoId,
   });
 }

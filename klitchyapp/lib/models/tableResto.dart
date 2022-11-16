@@ -6,7 +6,7 @@ class TableResto {
   String qrcode;
   String status;
   double total;
-  String restoID;
+  String restoId;
   bool isSplit;
 
   TableResto({
@@ -18,6 +18,6 @@ class TableResto {
     required this.status,
     required this.total,
     required this.isSplit,
-    required this.restoID,
+    required this.restoId,
   });
 }

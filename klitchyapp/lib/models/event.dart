@@ -4,7 +4,7 @@ class Event {
   String date;
   String imgurl;
   String description;
-  String restoID;
+  String restoId;
 
   Event({
     required this.id,
@@ -12,6 +12,6 @@ class Event {
     required this.date,
     required this.imgurl,
     required this.description,
-    required this.restoID,
+    required this.restoId,
   });
 }
