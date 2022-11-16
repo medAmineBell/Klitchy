@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:klitchyapp/models/category.dart';
+import 'package:klitchyapp/models/food.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/widgets/food_card.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,49 @@ class RestoScreen extends StatefulWidget {
 }
 
 class _RestoScreenState extends State<RestoScreen> {
+  final List<Food> popularFoods = [
+    Food(
+        id: "1",
+        categoryId: "1",
+        name: 'Tandoori Chicken',
+        price: 96.00,
+        description: "Chicken Chicken Chicken Chicken",
+        restoId: "1",
+        imgurl: "images/plate-001.png"),
+    Food(
+        id: "1",
+        categoryId: "1",
+        name: 'Salmon',
+        price: 40.50,
+        description: "Chicken Chicken Chicken Chicken",
+        restoId: "1",
+        imgurl: "images/plate-002.png"),
+    Food(
+        id: "1",
+        categoryId: "1",
+        name: 'Rice and meat',
+        price: 130.50,
+        description: "Chicken Chicken Chicken Chicken",
+        restoId: "1",
+        imgurl: "images/plate-003.png"),
+    Food(
+        id: "1",
+        categoryId: "1",
+        name: 'Vegan food',
+        price: 40.00,
+        description: "Chicken Chicken Chicken Chicken",
+        restoId: "1",
+        imgurl: "images/plate-007.png"),
+    Food(
+        id: "1",
+        categoryId: "1",
+        name: 'Rich food',
+        price: 140.00,
+        description: "Chicken Chicken Chicken Chicken",
+        restoId: "1",
+        imgurl: "images/plate-006.png"),
+  ];
+
   final List<Map<String, String>> popularFood = [
     {
       'name': 'Tandoori Chicken',
@@ -197,9 +241,9 @@ class _RestoScreenState extends State<RestoScreen> {
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 10.0),
                 scrollDirection: Axis.horizontal,
-                itemCount: this.popularFood.length,
+                itemCount: popularFoods.length,
                 itemBuilder: (context, index) {
-                  Map<String, String> product = this.popularFood[index];
+                  Food product = popularFoods[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(
@@ -211,17 +255,14 @@ class _RestoScreenState extends State<RestoScreen> {
                         },
                       );
                     },
-                    child: Hero(
-                      tag: 'detail_food$index',
-                      child: FoodCard(
-                        width: size.width / 2 - 30.0,
-                        primaryColor: theme.primaryColor,
-                        productName: product['name']!,
-                        productPrice: product['price']!,
-                        productUrl: product['image']!,
-                        productClients: product['clients']!,
-                        productRate: product['rate']!,
-                      ),
+                    child: FoodCard(
+                      width: size.width / 2 - 30.0,
+                      primaryColor: theme.primaryColor,
+                      productName: product.name,
+                      productPrice: product.price.toString(),
+                      productUrl: product.imgurl,
+                      productClients: "100",
+                      productRate: "4.9",
                     ),
                   );
                 },
