@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/food.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/category_foods_screen.dart';
 import 'package:klitchyapp/screens/food_details_screen.dart';
 import 'package:klitchyapp/widgets/food_card.dart';
 import 'package:provider/provider.dart';
@@ -94,6 +95,17 @@ class _RestoScreenState extends State<RestoScreen> {
       'clients': '10',
       'image': 'images/plate-006.png'
     }
+  ];
+
+  final List<Category> categories = [
+    Category(
+        id: "1", name: "Meat", imgurl: "images/Icon-001.png", restoId: "1"),
+    Category(
+        id: "1", name: "Burger", imgurl: "images/Icon-002.png", restoId: "1"),
+    Category(
+        id: "1", name: "Fastfood", imgurl: "images/Icon-003.png", restoId: "1"),
+    Category(
+        id: "1", name: "Salads", imgurl: "images/Icon-004.png", restoId: "1"),
   ];
 
   final List<Map<String, String>> foodOptions = [
@@ -192,40 +204,52 @@ class _RestoScreenState extends State<RestoScreen> {
                   padding: const EdgeInsets.only(
                     left: 20.0,
                   ),
-                  itemCount: this.foodOptions.length,
+                  itemCount: categories.length,
                   itemBuilder: (context, index) {
-                    Map<String, String> option = this.foodOptions[index];
-                    return Container(
-                      margin: const EdgeInsets.only(right: 35.0),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: 70,
-                            height: 70,
-                            margin: const EdgeInsets.only(bottom: 10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.0),
-                              ),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  option['image']!,
-                                ),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.grey[300]!,
-                                  offset: Offset(6.0, 6.0),
-                                )
-                              ],
+                    Category category = categories[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                CategoryFoodsScreen(
+                              category: category,
                             ),
                           ),
-                          Text(
-                            option['name']!,
-                            style: TextStyle(fontSize: 17.0),
-                          ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 35.0),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: 70,
+                              height: 70,
+                              margin: const EdgeInsets.only(bottom: 10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5.0),
+                                ),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    category.imgurl,
+                                  ),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.grey[300]!,
+                                    offset: Offset(6.0, 6.0),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Text(
+                              category.name,
+                              style: TextStyle(fontSize: 17.0),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }),
