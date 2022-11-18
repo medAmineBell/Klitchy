@@ -69,18 +69,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              iconBadge(
-                                icon: Icons.near_me,
-                                iconColor: theme.primaryColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Container(
                             margin: const EdgeInsets.only(
                               top: 15.0,
@@ -147,7 +135,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 child: Text(
-                                  'Add To Bad',
+                                  '$quantity',
                                   style: TextStyle(
                                     fontSize: 18.0,
                                     color: Colors.white,
@@ -168,6 +156,33 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                               ),
                             ],
                           ),
+                        ),
+                        Expanded(
+                          child: detailsTab(),
+                          // reviewTab(),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 30.0,
+                            vertical: 8.0,
+                          ),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Text(
+                            'Add To cart',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
                         ),
                       ],
                     ),
@@ -213,63 +228,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
             child: Text(
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut enim leo. In sagittis velit nibh. Morbi sollicitudin lorem vitae nisi iaculis,sit amet suscipit orci mollis. Ut dictum lectus eget diam vestibulum, at eleifend felis mattis. Sed molestie congue magna at venenatis. In mollis felis ut consectetur consequat.',
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 20.0),
-            color: Color.fromRGBO(250, 250, 250, 1.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.history,
-                      color: Colors.blue[900],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text('12am - 3pm'),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.gps_fixed,
-                      color: Colors.green[300],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text('3.54 km'),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.map,
-                      color: Colors.redAccent,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text('Map view'),
-                    )
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.directions_walk,
-                      color: Colors.deepOrange,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text('Delivery'),
-                    ),
-                  ],
-                ),
-              ],
             ),
           ),
         ],

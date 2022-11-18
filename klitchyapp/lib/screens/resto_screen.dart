@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/food.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/food_details_screen.dart';
 import 'package:klitchyapp/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 
@@ -246,13 +247,12 @@ class _RestoScreenState extends State<RestoScreen> {
                   Food product = popularFoods[index];
                   return GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        'details',
-                        arguments: {
-                          'product': product,
-                          'index': index,
-                        },
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => FoodDetailsScreen(
+                            food: product,
+                          ),
+                        ),
                       );
                     },
                     child: FoodCard(

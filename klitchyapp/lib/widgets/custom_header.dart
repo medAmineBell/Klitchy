@@ -42,23 +42,16 @@ class CustomHeader extends StatelessWidget {
           margin: const EdgeInsets.only(right: 10.0),
           child: Stack(
             children: <Widget>[
-              Icon(Icons.card_travel, size: 32.0),
+              Icon(Icons.shopping_cart_outlined, size: 32.0),
               Positioned(
                 bottom: 0,
-                right: 0,
+                right: 12,
                 child: Container(
                   height: 21.0,
                   width: 21.0,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 7.0,
-                        offset: Offset(-2.0, 2.0),
-                      )
-                    ],
                   ),
                   child: Center(
                     child: Text(
