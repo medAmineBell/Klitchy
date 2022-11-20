@@ -1,6 +1,6 @@
 class Order {
   String id;
-  String name;
+  int qty;
   double total;
   String status;
   String foodId;
@@ -10,7 +10,7 @@ class Order {
 
   Order({
     required this.id,
-    required this.name,
+    required this.qty,
     required this.total,
     required this.status,
     required this.foodId,

@@ -8,7 +8,16 @@ import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 
 class DataProvider with ChangeNotifier {
-  late TableResto tableResto;
+  TableResto tableResto = TableResto(
+      id: "1",
+      name: "20",
+      clients: "amine,kissa",
+      owner: "amine",
+      qrcode: "dskgdsjgdjsgkkdsgh",
+      status: "reserved",
+      total: 22.50,
+      isSplit: false,
+      restoId: "1");
   Resto resto = Resto(
     id: "1",
     email: "resto@gmail.com",

@@ -30,39 +30,15 @@ class FoodCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(
           children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: 140.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(productUrl),
-                    ),
+            Expanded(
+              child: Container(
+                //height: 140.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(productUrl),
                   ),
                 ),
-                // Container(
-                //   alignment: Alignment.topRight,
-                //   child: Container(
-                //     padding: const EdgeInsets.all(4.0),
-                //     decoration: BoxDecoration(
-                //       boxShadow: [
-                //         BoxShadow(
-                //           color: Colors.grey[300]!,
-                //           blurRadius: 4.0,
-                //           offset: Offset(3.0, 3.0),
-                //         )
-                //       ],
-                //       shape: BoxShape.circle,
-                //       color: Colors.white,
-                //     ),
-                //     child: Icon(
-                //       Icons.favorite,
-                //       size: 17.0,
-                //       color: primaryColor,
-                //     ),
-                //   ),
-                // )
-              ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(

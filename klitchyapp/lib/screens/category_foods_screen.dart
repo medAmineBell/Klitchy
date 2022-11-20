@@ -140,7 +140,6 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
             ),
             Expanded(
               child: GridView.builder(
-                padding: const EdgeInsets.only(left: 10.0),
                 scrollDirection: Axis.vertical,
                 itemCount: popularFoods.length,
                 itemBuilder: (context, index) {
@@ -159,7 +158,7 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
                         );
                       },
                       child: FoodCard(
-                        width: size.width / 2 - 30.0,
+                        width: size.width / 2,
                         primaryColor: theme.primaryColor,
                         productName: product.name,
                         productPrice: product.price.toString(),
