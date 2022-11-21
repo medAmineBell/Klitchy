@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/cart_screen.dart';
+import 'package:klitchyapp/screens/events_screen.dart';
 import 'package:klitchyapp/screens/orders_screen.dart';
 import 'package:klitchyapp/screens/profile_screen.dart';
 import 'package:klitchyapp/screens/resto_screen.dart';
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: const <Widget>[
           RestoScreen(),
           TableScreen(),
-          OrdersScreen(),
+          EventsScreen(),
           ProfileScreen(),
         ],
         onPageChanged: (int index) {
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           FABBottomAppBarItem(
             iconData: Icons.view_list_outlined,
-            text: 'Orders',
+            text: 'Events',
           ),
           FABBottomAppBarItem(
             iconData: Icons.person,

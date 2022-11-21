@@ -24,4 +24,33 @@ class Resto {
     required this.isActive,
     required this.haveEvent,
   });
+
+  factory Resto.fromJson(Map<String, dynamic> json) => Resto(
+        id: json["id"].toString(),
+        email: json["email"].toString(),
+        username: json["username"].toString(),
+        password: json["password"].toString(),
+        name: json["name"].toString(),
+        phone: json["phone"].toString(),
+        imgurl: json["imgurl"].toString(),
+        address: json["address"].toString(),
+        canOrder: json["canOrder"],
+        isActive: json["isActive"],
+        haveEvent: json["haveEvent"],
+      );
+
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['id'] = id;
+  //   data['email'] = email;
+  //   data['listclients'] = listclients;
+  //   data['owner'] = owner;
+  //   data['qrcode'] = qrcode;
+  //   data['status'] = status;
+  //   data['total'] = total;
+  //   data['isSplit'] = isSplit;
+  //   data['restoId'] = restoId;
+
+  //   return data;
+  // }
 }

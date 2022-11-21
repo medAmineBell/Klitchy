@@ -20,17 +20,17 @@ class TableResto {
     required this.isSplit,
     required this.restoId,
   });
-  TableResto.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    listclients = json['listclients'];
-    owner = json['owner'];
-    qrcode = json['qrcode'];
-    status = json['status'];
-    total = json['total'];
-    isSplit = json['isSplit'];
-    restoId = json['restoId'];
-  }
+  factory TableResto.fromJson(Map<String, dynamic> json) => TableResto(
+        id: json["id"].toString(),
+        name: json["name"].toString(),
+        listclients: json["listclients"].toString(),
+        owner: json["owner"].toString(),
+        qrcode: json["qrcode"].toString(),
+        total: double.parse(json["total"].toString()),
+        status: json["status"].toString(),
+        isSplit: json["isSplit"],
+        restoId: json["restoId"].toString(),
+      );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

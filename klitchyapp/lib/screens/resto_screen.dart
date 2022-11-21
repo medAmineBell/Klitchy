@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:klitchyapp/models/category.dart';
+import 'package:klitchyapp/models/client.dart';
 import 'package:klitchyapp/models/food.dart';
+import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/category_foods_screen.dart';
 import 'package:klitchyapp/screens/food_details_screen.dart';
@@ -128,11 +130,15 @@ class _RestoScreenState extends State<RestoScreen> {
   ];
 
   late List<Map<String, String>> randomFood;
+  late Client client;
+  late Resto resto;
 
   @override
   void initState() {
     super.initState();
     randomFood = popularFood.reversed.toList();
+    client = Provider.of<DataProvider>(context, listen: false).client;
+    resto = Provider.of<DataProvider>(context, listen: false).resto;
   }
 
   @override
@@ -155,8 +161,8 @@ class _RestoScreenState extends State<RestoScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'What would you like to eat?',
-                    style: TextStyle(fontSize: 21.0),
+                    resto.name,
+                    style: TextStyle(fontSize: 16.0),
                   ),
                   Icon(Icons.notifications_none, size: 28.0)
                 ],
@@ -164,7 +170,29 @@ class _RestoScreenState extends State<RestoScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                top: 25.0,
+                top: 10.0,
+                left: 20.0,
+                right: 20.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Hello ${client.name}!',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  Text(
+                    'Find your Meals',
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 15.0,
                 left: 20.0,
                 right: 20.0,
               ),

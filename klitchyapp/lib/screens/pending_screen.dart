@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/models/client.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
@@ -7,8 +8,7 @@ import 'package:klitchyapp/screens/into_screen.dart';
 import 'package:provider/provider.dart';
 
 class PendingScreen extends StatefulWidget {
-  final TableResto tableResto;
-  const PendingScreen({Key? key, required this.tableResto}) : super(key: key);
+  const PendingScreen({Key? key}) : super(key: key);
 
   @override
   State<PendingScreen> createState() => _PendingScreenState();
@@ -18,11 +18,15 @@ class _PendingScreenState extends State<PendingScreen> {
   TextEditingController telcontroller = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
   late Resto resto;
+  late TableResto tableResto;
+  late Client owner;
 
   @override
   void initState() {
     super.initState();
     resto = Provider.of<DataProvider>(context, listen: false).resto;
+    tableResto = Provider.of<DataProvider>(context, listen: false).tableResto;
+    owner = Provider.of<DataProvider>(context, listen: false).owner;
   }
 
   @override
@@ -33,30 +37,30 @@ class _PendingScreenState extends State<PendingScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Text(resto.name),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
-          Text("Pending confirmation"),
-          SizedBox(
+          const Text("Pending confirmation"),
+          const SizedBox(
             height: 30,
           ),
-          Text("Table: " + widget.tableResto.name),
-          SizedBox(
+          Text("Table: " + tableResto.name),
+          const SizedBox(
             height: 30,
           ),
-          Text("Owner: " + widget.tableResto.owner),
-          SizedBox(
+          Text("Owner: " + owner.name),
+          const SizedBox(
             height: 30,
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
-          CircularProgressIndicator(),
-          SizedBox(
+          const CircularProgressIndicator(),
+          const SizedBox(
             height: 50,
           ),
           ElevatedButton(
@@ -71,8 +75,8 @@ class _PendingScreenState extends State<PendingScreen> {
                   primary: Colors.teal,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20))),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
                 child: Text(
                   "Continue",
                   style: TextStyle(
@@ -85,7 +89,7 @@ class _PendingScreenState extends State<PendingScreen> {
               onPressed: () async {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => IntroScreen(),
+                    builder: (BuildContext context) => const IntroScreen(),
                   ),
                 );
               },
@@ -93,8 +97,8 @@ class _PendingScreenState extends State<PendingScreen> {
                   primary: Colors.teal,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20))),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
                 child: Text(
                   "Quit",
                   style: TextStyle(

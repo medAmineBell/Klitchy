@@ -1,45 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:klitchyapp/models/client.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/create_client_screen.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/pending_screen.dart';
-import 'package:klitchyapp/screens/resto_screen.dart';
 import 'package:provider/provider.dart';
 
-class ScannedTableScreen extends StatefulWidget {
-  const ScannedTableScreen({
+class OpenTableScreen extends StatefulWidget {
+  const OpenTableScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ScannedTableScreen> createState() => _ScannedTableScreenState();
+  State<OpenTableScreen> createState() => _OpenTableScreenState();
 }
 
-class _ScannedTableScreenState extends State<ScannedTableScreen> {
+class _OpenTableScreenState extends State<OpenTableScreen> {
   TextEditingController telcontroller = TextEditingController();
-
+  TextEditingController namecontroller = TextEditingController();
   late Resto resto;
   late TableResto tableResto;
-  late Client owner;
 
   @override
   void initState() {
     super.initState();
     resto = Provider.of<DataProvider>(context, listen: false).resto;
     tableResto = Provider.of<DataProvider>(context, listen: false).tableResto;
-    owner = Provider.of<DataProvider>(context, listen: false).owner;
   }
 
   @override
   void dispose() {
     super.dispose();
     telcontroller.dispose();
+    namecontroller.dispose();
   }
 
   bool _validtel = false;
+  bool _validname = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,7 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
             SizedBox(
               height: 30,
             ),
-            Text("Owner: " + owner.name),
+            Text("You will be the Owner of this table"),
             SizedBox(
               height: 30,
             ),
@@ -96,16 +94,15 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
                         : _validtel = false;
                   });
                   if (telcontroller.text.isNotEmpty) {
-                    // Provider.of<DataProvider>(context, listen: false)
-                    //     .setClient(namecontroller.text, telcontroller.text);
-
                     final isClient =
                         await Provider.of<DataProvider>(context, listen: false)
                             .getClientByPhone(telcontroller.text);
                     if (isClient) {
+                      await Provider.of<DataProvider>(context, listen: false)
+                          .setOwner();
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (BuildContext context) => PendingScreen(),
+                          builder: (BuildContext context) => HomeScreen(),
                         ),
                       );
                     } else {
@@ -113,11 +110,18 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
                         MaterialPageRoute(
                           builder: (BuildContext context) => CreateClientScreen(
                             phone: telcontroller.text,
-                            isOwner: false,
+                            isOwner: true,
                           ),
                         ),
                       );
                     }
+
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) =>
+                    //         PendingScreen(tableResto: tableResto),
+                    //   ),
+                    // );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -127,7 +131,7 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    "Request",
+                    "Open Table",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,

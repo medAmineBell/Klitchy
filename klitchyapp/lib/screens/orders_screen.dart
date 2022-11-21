@@ -1,43 +1,37 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:klitchyapp/models/category.dart';
-import 'package:klitchyapp/provider/data_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
+  State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () {
-          SystemNavigator.pop();
-          return Future.value(false);
-        },
-        child: SafeArea(
-          child: Container(
-            width: double.infinity,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text("Orders"),
-                  SizedBox(
-                    height: 50,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ));
+    ThemeData theme = Theme.of(context);
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Orders"),
+          centerTitle: true,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.arrow_back_ios_new)),
+        ),
+        body: Column(
+          children: <Widget>[],
+        ),
+      ),
+    );
   }
 }

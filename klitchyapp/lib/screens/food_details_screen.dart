@@ -11,11 +11,12 @@ class FoodDetailsScreen extends StatefulWidget {
 }
 
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
+  int quantity = 0;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
-    int quantity = 0;
 
     return Scaffold(
       body: Stack(
@@ -36,7 +37,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
               children: <Widget>[
                 CustomHeader(
                   title: '',
-                  quantity: quantity,
+                  quantity: 0,
                   internalScreen: true,
                 ),
                 Container(

@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/notable_screen.dart';
+import 'package:klitchyapp/screens/openTable_screen.dart';
 import 'package:klitchyapp/screens/scanned_table_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -63,28 +65,36 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                   Container(
                     margin: EdgeInsets.all(8),
                     child: TextButton(
-                      onPressed: () {
-                        //Navigator.of(context).pop();
-                        TableResto tableResto = TableResto(
-                            id: "1",
-                            name: "20",
-                            listclients: "amine,kissa",
-                            owner: "amine",
-                            qrcode: "dskgdsjgdjsgkkdsgh",
-                            status: "reserved",
-                            total: 22.50,
-                            isSplit: false,
-                            restoId: "1");
-                        Provider.of<DataProvider>(context, listen: false)
-                            .setTableResto(tableResto);
-                        Provider.of<DataProvider>(context, listen: false)
+                      onPressed: () async {
+                        final tableResto = await Provider.of<DataProvider>(
+                                context,
+                                listen: false)
                             .getTableByQrCode("1234");
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ScannedTableScreen(tableResto: tableResto),
-                          ),
-                        );
+
+                        if (tableResto == null) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  NoTableScreen(),
+                            ),
+                          );
+                        } else {
+                          if (tableResto.owner.isEmpty) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    OpenTableScreen(),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ScannedTableScreen(),
+                              ),
+                            );
+                          }
+                        }
                       },
                       child: Text(
                         "Annuler",
