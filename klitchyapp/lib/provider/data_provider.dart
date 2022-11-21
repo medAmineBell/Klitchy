@@ -8,10 +8,11 @@ import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 
 class DataProvider with ChangeNotifier {
+  final String serverUrl = "http://10.0.2.2:8081";
   TableResto tableResto = TableResto(
       id: "1",
       name: "20",
-      clients: "amine,kissa",
+      listclients: "amine,kissa",
       owner: "amine",
       qrcode: "dskgdsjgdjsgkkdsgh",
       status: "reserved",
@@ -44,13 +45,14 @@ class DataProvider with ChangeNotifier {
   }
 
   Future<void> getTableByQrCode(String code) async {
-    const url = 'http://localhost/api/getTable';
+    final url = serverUrl + '/api/tableRestos/getTable';
 
     final response = await http.post(Uri.parse(url), body: {"qrcode": code});
 
     try {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       //final userData = extractedData['user'];
+      print(extractedData);
       if (extractedData != null) {
         // user.id = userData["id"].toString();
         // user.fname = userData["first_name"];

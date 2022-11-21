@@ -61,7 +61,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget renderAddList() {
     return ListView.builder(
-      itemCount: this.foods.length,
+      itemCount: foods.length,
       itemBuilder: (BuildContext context, int index) {
         Map<String, String> food = foods[index];
         Color primaryColor = Theme.of(context).primaryColor;
@@ -91,7 +91,7 @@ class _CartScreenState extends State<CartScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(food['name']!),
-                            Icon(
+                            const Icon(
                               Icons.delete_outline,
                               color: Colors.red,
                             )
@@ -107,7 +107,7 @@ class _CartScreenState extends State<CartScreen> {
                                   qty--;
                                 });
                               },
-                              child: Icon(Icons.remove),
+                              child: const Icon(Icons.remove),
                             ),
                             Container(
                               color: primaryColor,
@@ -120,7 +120,7 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                               child: Text(
                                 qty.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
@@ -131,7 +131,7 @@ class _CartScreenState extends State<CartScreen> {
                                   qty++;
                                 });
                               },
-                              child: Icon(Icons.add),
+                              child: const Icon(Icons.add),
                             ),
                           ],
                         ),
@@ -150,16 +150,18 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Size size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Cart"),
+          title: const Text("Cart"),
           centerTitle: true,
-          backgroundColor: Colors.teal,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
           leading: IconButton(
               onPressed: () => Navigator.of(context).pop(),
-              icon: Icon(Icons.arrow_back_ios_new)),
+              icon: const Icon(Icons.arrow_back_ios_new)),
         ),
         body: Column(
           children: <Widget>[
@@ -169,15 +171,15 @@ class _CartScreenState extends State<CartScreen> {
                 child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: this.renderAddList(),
+                      child: renderAddList(),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Total",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
@@ -191,7 +193,7 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
@@ -203,7 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                         color: theme.primaryColor,
                       ),
-                      child: Text(
+                      child: const Text(
                         'CHECKOUT',
                         style: TextStyle(
                           color: Colors.white,

@@ -113,7 +113,9 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
       appBar: AppBar(
         title: Text(widget.category.name),
         centerTitle: true,
-        backgroundColor: Colors.teal,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.arrow_back_ios_new)),
@@ -122,22 +124,22 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-                left: 20.0,
-                right: 20.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    widget.category.name,
-                    style: const TextStyle(fontSize: 21.0),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     top: 20.0,
+            //     left: 20.0,
+            //     right: 20.0,
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: <Widget>[
+            //       Text(
+            //         widget.category.name,
+            //         style: const TextStyle(fontSize: 21.0),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Expanded(
               child: GridView.builder(
                 scrollDirection: Axis.vertical,

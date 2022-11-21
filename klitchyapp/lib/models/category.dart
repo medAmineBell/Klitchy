@@ -1,8 +1,8 @@
 class Category {
-  String id;
-  String name;
-  String imgurl;
-  String restoId;
+  late String id;
+  late String name;
+  late String imgurl;
+  late String restoId;
 
   Category({
     required this.id,
@@ -10,4 +10,21 @@ class Category {
     required this.imgurl,
     required this.restoId,
   });
+
+  Category.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    imgurl = json['imgurl'];
+    restoId = json['restoId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['imgurl'] = imgurl;
+    data['restoId'] = restoId;
+
+    return data;
+  }
 }

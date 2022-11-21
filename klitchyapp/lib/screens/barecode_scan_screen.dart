@@ -68,7 +68,7 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                         TableResto tableResto = TableResto(
                             id: "1",
                             name: "20",
-                            clients: "amine,kissa",
+                            listclients: "amine,kissa",
                             owner: "amine",
                             qrcode: "dskgdsjgdjsgkkdsgh",
                             status: "reserved",
@@ -77,6 +77,8 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                             restoId: "1");
                         Provider.of<DataProvider>(context, listen: false)
                             .setTableResto(tableResto);
+                        Provider.of<DataProvider>(context, listen: false)
+                            .getTableByQrCode("1234");
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
