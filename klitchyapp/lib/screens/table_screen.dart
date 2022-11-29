@@ -61,7 +61,7 @@ class _TableScreenState extends State<TableScreen> {
                   SizedBox(
                     height: 30,
                   ),
-                  if (owner.id != client.id)
+                  if (owner.id == client.id)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

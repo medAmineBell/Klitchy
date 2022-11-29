@@ -6,7 +6,10 @@ import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/barecode_scan_screen.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/into_screen.dart';
+import 'package:klitchyapp/screens/restaurant_preview_screen.dart';
 import 'package:klitchyapp/screens/scanned_table_screen.dart';
+import 'package:klitchyapp/screens/test/add_category.dart';
+import 'package:klitchyapp/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
 main() async {
@@ -42,12 +45,12 @@ class _MyAppState extends State<MyApp> {
         title: 'Klitchy',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Colors.teal,
-          textTheme: GoogleFonts.poppinsTextTheme(
+          primaryColor: Color.fromRGBO(0, 108, 129, 1),
+          textTheme: GoogleFonts.latoTextTheme(
             Theme.of(context).textTheme,
           ),
         ),
-        home: IntroScreen(),
+        home: RestaurantPreviewScreen(),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/client.dart';
 import 'package:klitchyapp/models/resto.dart';
@@ -148,5 +149,77 @@ class DataProvider with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  //Test
+  // Future<void> addCategoryAPI(String name, XFile image) async {
+  //   final imgurl = await uploadFileAPI(image);
+  //   final url = serverUrl + '/api/categories';
+  //   final response = await http.post(Uri.parse(url),
+  //       body: {"restoId": resto.id, "name": name, "imgurl": imgurl});
+
+  //   print(response.body);
+  // }
+
+  // Future<String> uploadFileAPI(XFile image) async {
+  //   String imgurl = "";
+  //   var request = http.MultipartRequest(
+  //       'POST', Uri.parse(serverUrl + '/api/uploadFile/upload'));
+
+  //   request.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+  //   http.StreamedResponse response = await request.send();
+
+  //   if (response.statusCode == 200) {
+  //     final bodyres = await response.stream.bytesToString();
+  //     final extractedData = json.decode(bodyres) as Map<String, dynamic>;
+
+  //     imgurl = extractedData['filename'];
+  //   } else {
+  //     print(response.reasonPhrase);
+  //   }
+
+  //   return imgurl;
+  // }
+
+  Future<void> addCategoryAPI(String name, XFile image) async {
+    var request =
+        http.MultipartRequest('POST', Uri.parse(serverUrl + '/api/categories'));
+
+    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+    request.fields.addAll({
+      'name': name,
+      'restoId': "1",
+    });
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<String> uploadFileAPI(XFile image) async {
+    String imgurl = "";
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(serverUrl + '/api/uploadFile/upload'));
+
+    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      final bodyres = await response.stream.bytesToString();
+      final extractedData = json.decode(bodyres) as Map<String, dynamic>;
+
+      imgurl = extractedData['filename'];
+    } else {
+      print(response.reasonPhrase);
+    }
+
+    return imgurl;
   }
 }
