@@ -127,17 +127,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   CircleAvatar(
                     radius: 50,
-                    backgroundColor: Colors.teal,
+                    backgroundColor: Theme.of(context).primaryColor,
                     child: ClipOval(
                       child: Icon(
-                        Icons.person,
-                        size: 80,
+                        Icons.person_outline,
+                        size: 60,
                         color: Colors.white,
                       ),
                     ),
                   ),
                   buildProfile(),
                   buildSettings(),
+                  SizedBox(
+                    height: 50,
+                  ),
                   buildLogOut(),
                   SizedBox(
                     height: 10,
@@ -168,7 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               ListTile(
                 leading: Icon(
-                  Icons.person,
+                  Icons.person_outline,
+                  color: Theme.of(context).primaryColor,
                 ),
                 // title: Text(
                 //   "Full name",
@@ -187,7 +191,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Divider(),
               ListTile(
-                leading: Icon(Icons.phone),
+                leading: Icon(
+                  Icons.phone,
+                  color: Theme.of(context).primaryColor,
+                ),
                 // title: Text(
                 //   "Phone",
                 //   style: TextStyle(
@@ -231,7 +238,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (BuildContext context) => OrdersScreen()));
               },
               child: ListTile(
-                leading: Icon(Icons.list_alt_outlined),
+                leading: Icon(
+                  Icons.list_alt_outlined,
+                  color: Theme.of(context).primaryColor,
+                ),
                 title: Text(
                   "Orders",
                   style: TextStyle(
@@ -249,7 +259,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //     builder: (BuildContext context) => PaymentsScreen()));
               },
               child: ListTile(
-                leading: Icon(Icons.settings),
+                leading: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).primaryColor,
+                ),
                 title: Text(
                   "Settings",
                   style: TextStyle(
@@ -274,8 +287,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Padding(
         padding: EdgeInsets.only(top: 20, right: 16, left: 16),
         child: Container(
+          width: 200,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.all(
               Radius.circular(15),
             ),

@@ -1,12 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:klitchyapp/models/resto.dart';
-import 'package:klitchyapp/models/tableResto.dart';
-import 'package:klitchyapp/provider/data_provider.dart';
-import 'package:klitchyapp/screens/barecode_scan_screen.dart';
 import 'package:klitchyapp/screens/into_screen.dart';
-import 'package:klitchyapp/screens/resto_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({
@@ -151,7 +146,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   right: 90,
                   child: InkWell(
                     onTap: () async {
-                      Navigator.of(context).push(
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool("fRun", false);
+                      Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (BuildContext context) => IntroScreen(),
                         ),

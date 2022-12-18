@@ -5,6 +5,7 @@ import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/into_screen.dart';
+import 'package:klitchyapp/screens/restaurant_preview_screen.dart';
 import 'package:provider/provider.dart';
 
 class PendingScreen extends StatefulWidget {
@@ -35,78 +36,74 @@ class _PendingScreenState extends State<PendingScreen> {
         body: Container(
       width: double.infinity,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(
-            height: 50,
+          Column(
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Image.asset(
+                "images/logo.png",
+                width: 166,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           ),
-          Text(resto.name),
-          const SizedBox(
-            height: 30,
+          Column(
+            children: [
+              Text("En attente de confirmation",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700)),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Text(
+                    "Veuillez saisir votre nom complet, afin que nous puissions nous souvenir de vous et vous envoyer des informations sur nos promotions",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400)),
+              ),
+            ],
           ),
-          const Text("Pending confirmation"),
-          const SizedBox(
-            height: 30,
-          ),
-          Text("Table: " + tableResto.name),
-          const SizedBox(
-            height: 30,
-          ),
-          Text("Owner: " + owner.name),
-          const SizedBox(
-            height: 30,
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          const CircularProgressIndicator(),
-          const SizedBox(
-            height: 50,
-          ),
-          ElevatedButton(
-              onPressed: () async {
+          Padding(
+            padding: const EdgeInsets.only(bottom: 50),
+            child: InkWell(
+              onTap: () async {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => HomeScreen(),
+                    builder: (BuildContext context) =>
+                        RestaurantPreviewScreen(),
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20))),
-              child: const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+              child: Container(
+                width: 200,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(68),
+                  color: Color(0xFF006C81),
                 ),
-              )),
-          ElevatedButton(
-              onPressed: () async {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const IntroScreen(),
+                child: Center(
+                  child: Text(
+                    "QUIT",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20))),
-              child: const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "Quit",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     ));

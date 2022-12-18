@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/notable_screen.dart';
 import 'package:klitchyapp/screens/openTable_screen.dart';
 import 'package:klitchyapp/screens/scanned_table_screen.dart';
@@ -79,6 +80,12 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                             ),
                           );
                         } else {
+                          // Navigator.of(context).pushReplacement(
+                          //   MaterialPageRoute(
+                          //     builder: (BuildContext context) => HomeScreen(),
+                          //   ),
+                          // );
+
                           if (tableResto.owner.isEmpty) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(

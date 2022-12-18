@@ -43,19 +43,165 @@ class _TableScreenState extends State<TableScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 50,
-                  ),
-                  Text(resto.name),
-                  SizedBox(
                     height: 30,
                   ),
-                  Text("Table: " + tableResto.name),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text("Owner: " + owner.name),
-                  SizedBox(
-                    height: 30,
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                      color: Colors.white,
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Color.fromRGBO(0, 108, 129, 0.3),
+                                    ),
+                                    child: Icon(
+                                      Icons.restaurant,
+                                      size: 30,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(tableResto.name,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700)),
+                                      Text(owner.name,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                  ),
+                                  Expanded(child: Container()),
+                                  Text("OWNER",
+                                      style: TextStyle(
+                                          color: Colors.grey[700],
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700)),
+                                ],
+                              ),
+                            ),
+                            ListTile(
+                              subtitle: Text(
+                                "Medium Spicy Spagethi ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.grey[700],
+                                  fontSize: 14,
+                                ),
+                              ),
+                              title: Text(
+                                "X2",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              trailing: Text(
+                                "21 DT",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            ListTile(
+                              subtitle: Text(
+                                "Medium Spicy Spagethi ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.grey[700],
+                                  fontSize: 14,
+                                ),
+                              ),
+                              title: Text(
+                                "X2",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              trailing: Text(
+                                "21 DT",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 2,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "TOTAL",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      "48 DT",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Image.asset("images/barcode.png"),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   buildListUsers(),
                   SizedBox(
@@ -65,38 +211,57 @@ class _TableScreenState extends State<TableScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton(
-                            onPressed: () async {},
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.teal,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            child: const Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Pay Separate",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 50),
+                          child: InkWell(
+                            onTap: () async {},
+                            child: Container(
+                              width: 160,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 1),
+                                color: Colors.white,
                               ),
-                            )),
-                        ElevatedButton(
-                            onPressed: () async {},
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.teal,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            child: const Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                "Pay All",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                              child: Center(
+                                child: Text(
+                                  "SPLIT THE BILL",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 50),
+                          child: InkWell(
+                            onTap: () async {},
+                            child: Container(
+                              width: 160,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Color(0xFF006C81),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "PAY ALL",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                 ],
@@ -109,107 +274,117 @@ class _TableScreenState extends State<TableScreen> {
   Widget buildListUsers() {
     return Padding(
       padding: EdgeInsets.only(top: 20, right: 16, left: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
-        padding: EdgeInsets.only(top: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: () {},
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (owner.id == client.id)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
               child: ListTile(
-                leading: Icon(Icons.person),
+                tileColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                leading: Icon(
+                  Icons.person_outline,
+                  size: 40,
+                  color: Theme.of(context).primaryColor,
+                ),
                 subtitle: Text(
-                  "17 DT",
+                  "Owner",
                   style: TextStyle(
                     // fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: Colors.grey[700], fontSize: 16,
                   ),
                 ),
                 title: Text(
                   owner.name,
                   style: TextStyle(
-                    // fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
-                trailing: Icon(Icons.arrow_drop_down),
-              ),
-            ),
-            Divider(),
-            if (owner.id != client.id)
-              InkWell(
-                onTap: () {},
-                child: ListTile(
-                  leading: Icon(Icons.person),
-                  subtitle: Text(
-                    "17 DT",
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                  title: Text(
-                    client.name,
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                  trailing: Icon(Icons.arrow_drop_down),
-                ),
-              ),
-            if (owner.id != client.id) Divider(),
-            InkWell(
-              onTap: () {},
-              child: ListTile(
-                leading: Icon(Icons.person),
-                subtitle: Text(
-                  "13 DT",
-                  style: TextStyle(
-                    // fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-                title: Text(
-                  "Mehdi",
-                  style: TextStyle(
-                    // fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-                trailing: Icon(Icons.arrow_drop_down),
-              ),
-            ),
-            Divider(),
-            InkWell(
-              onTap: () {},
-              child: ListTile(
-                leading: Icon(Icons.person),
-                subtitle: Text(
+                trailing: Text(
                   "21 DT",
                   style: TextStyle(
-                    // fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
-                title: Text(
-                  "Ali",
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                trailing: Icon(Icons.arrow_drop_down),
               ),
             ),
-          ],
-        ),
+          if (owner.id != client.id)
+            ListTile(
+              tileColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              leading: Icon(
+                Icons.person_outline,
+                size: 40,
+                color: Theme.of(context).primaryColor,
+              ),
+              subtitle: Text(
+                "Me",
+                style: TextStyle(
+                  // fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              title: Text(
+                owner.name,
+                style: TextStyle(
+                  // fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              trailing: Text(
+                "16 DT",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ListTile(
+              tileColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              leading: Icon(
+                Icons.person_outline,
+                size: 40,
+                color: Theme.of(context).primaryColor,
+              ),
+              subtitle: Text(
+                "Guest",
+                style: TextStyle(
+                  // fontWeight: FontWeight.w600,
+                  color: Colors.grey[700], fontSize: 16,
+                ),
+              ),
+              title: Text(
+                owner.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+              trailing: Text(
+                "7 DT",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

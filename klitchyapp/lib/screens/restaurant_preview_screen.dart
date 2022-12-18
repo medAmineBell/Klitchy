@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/screens/home_screen.dart';
 
 class RestaurantPreviewScreen extends StatelessWidget {
   const RestaurantPreviewScreen({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class RestaurantPreviewScreen extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     Colors.transparent,
-                    Colors.transparent,
+                    // Colors.transparent,
                     Colors.black,
                   ],
                   begin: Alignment.topCenter,
@@ -61,18 +62,87 @@ class RestaurantPreviewScreen extends StatelessWidget {
             ),
             Positioned(
               bottom: 150,
-              left: 50,
+              left: 40,
               child: Row(
                 children: [
-                  Image.asset(
-                    "images/kamkoum.jpeg",
-                    fit: BoxFit.cover,
+                  Container(
                     width: 67,
                     height: 67,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(11),
+                      image: DecorationImage(
+                          image: Image.asset("images/kamkoum.jpeg").image,
+                          fit: BoxFit.cover),
+                    ),
                   ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  // Image.asset(
+                  //   "images/kamkoum.jpeg",
+                  //   fit: BoxFit.cover,
+                  //   width: 67,
+                  //   height: 67,
+                  // ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        textAlign: TextAlign.center,
+                        "9am9oum Nabeul",
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      Text(
+                        textAlign: TextAlign.center,
+                        "Traditional tunisian dishes",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF6D6D6D),
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  )
                 ],
               ),
-            )
+            ),
+            Positioned(
+              bottom: 10,
+              left: 20,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: InkWell(
+                  onTap: () async {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => HomeScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(68),
+                      color: Color.fromRGBO(0, 108, 129, 0.3),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "View menu",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

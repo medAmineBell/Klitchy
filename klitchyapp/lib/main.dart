@@ -3,25 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
-import 'package:klitchyapp/screens/barecode_scan_screen.dart';
-import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/into_screen.dart';
-import 'package:klitchyapp/screens/restaurant_preview_screen.dart';
-import 'package:klitchyapp/screens/scanned_table_screen.dart';
-import 'package:klitchyapp/screens/test/add_category.dart';
+import 'package:klitchyapp/screens/splash_screen.dart';
 import 'package:klitchyapp/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //final token = prefs.getString("token") ?? "";
+  final fRun = prefs.getBool("fRun") ?? true;
 
   runApp(
-    MyApp(),
+    MyApp(fRun),
   );
 }
 
 class MyApp extends StatefulWidget {
+  final bool fRun;
+  MyApp(this.fRun);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -50,7 +52,7 @@ class _MyAppState extends State<MyApp> {
             Theme.of(context).textTheme,
           ),
         ),
-        home: RestaurantPreviewScreen(),
+        home: widget.fRun ? WelcomeScreen() : SplashScreen(),
       ),
     );
   }

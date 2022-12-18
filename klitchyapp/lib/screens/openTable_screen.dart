@@ -5,6 +5,7 @@ import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/create_client_screen.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/pending_screen.dart';
+import 'package:klitchyapp/screens/restaurant_preview_screen.dart';
 import 'package:provider/provider.dart';
 
 class OpenTableScreen extends StatefulWidget {
@@ -43,103 +44,174 @@ class _OpenTableScreenState extends State<OpenTableScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50,
-            ),
-            Text(resto.name),
-            SizedBox(
-              height: 30,
-            ),
-            Text("Table: " + tableResto.name),
-            SizedBox(
-              height: 30,
-            ),
-            Text("You will be the Owner of this table"),
-            SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextFormField(
-                keyboardType: TextInputType.phone,
-                autofocus: false,
-                controller: telcontroller,
-                // style: TextStyle(
-                //   color: Colors.white,
-                // ),
-                decoration: InputDecoration(
-                  labelText: 'Téléphone',
-                  // labelStyle: TextStyle(
-                  //   color: Colors.white,
-                  // ),
-                  errorText: _validtel ? 'Téléphone vide !' : null,
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Image.asset(
+                "images/logo.png",
+                width: 166,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Card(
+                color: Colors.white,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Container(
+                  width: 200,
+                  height: 180,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        resto.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Color.fromRGBO(0, 108, 129, 0.3),
+                        ),
+                        child: Icon(
+                          Icons.restaurant,
+                          size: 40,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(tableResto.name,
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400)),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("You will be the Owner of this table",
+                          style: TextStyle(
+                              color: Color(0xFF717579),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400)),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    telcontroller.text.isEmpty
-                        ? _validtel = true
-                        : _validtel = false;
-                  });
-                  if (telcontroller.text.isNotEmpty) {
-                    final isClient =
-                        await Provider.of<DataProvider>(context, listen: false)
-                            .getClientByPhone(telcontroller.text);
-                    if (isClient) {
-                      await Provider.of<DataProvider>(context, listen: false)
-                          .setOwner();
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => HomeScreen(),
-                        ),
-                      );
-                    } else {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => CreateClientScreen(
-                            phone: telcontroller.text,
-                            isOwner: true,
-                          ),
-                        ),
-                      );
-                    }
+              SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextFormField(
+                  keyboardType: TextInputType.phone,
+                  autofocus: false,
+                  controller: telcontroller,
+                  // style: TextStyle(
+                  //   color: Colors.white,
+                  // ),
+                  decoration: InputDecoration(
+                    labelText: 'Téléphone',
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      color: Theme.of(context).primaryColor,
+                    ),
 
-                    // Navigator.of(context).pushReplacement(
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) =>
-                    //         PendingScreen(tableResto: tableResto),
-                    //   ),
-                    // );
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    errorText: _validtel ? 'Téléphone vide !' : null,
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    // border: OutlineInputBorder(
+                    //     borderRadius: BorderRadius.circular(32.0)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 50),
+            child: InkWell(
+              onTap: () async {
+                setState(() {
+                  telcontroller.text.isEmpty
+                      ? _validtel = true
+                      : _validtel = false;
+                });
+                if (telcontroller.text.isNotEmpty) {
+                  final isClient =
+                      await Provider.of<DataProvider>(context, listen: false)
+                          .getClientByPhone(telcontroller.text);
+                  if (isClient) {
+                    await Provider.of<DataProvider>(context, listen: false)
+                        .setOwner();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            RestaurantPreviewScreen(),
+                      ),
+                    );
+                  } else {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => CreateClientScreen(
+                          phone: telcontroller.text,
+                          isOwner: true,
+                        ),
+                      ),
+                    );
                   }
-                },
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.teal,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20))),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
+
+                  // Navigator.of(context).pushReplacement(
+                  //   MaterialPageRoute(
+                  //     builder: (BuildContext context) =>
+                  //         PendingScreen(tableResto: tableResto),
+                  //   ),
+                  // );
+                }
+              },
+              child: Container(
+                width: 200,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(68),
+                  color: Color(0xFF006C81),
+                ),
+                child: Center(
                   child: Text(
                     "Open Table",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
                   ),
-                )),
-          ],
-        ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     ));
   }

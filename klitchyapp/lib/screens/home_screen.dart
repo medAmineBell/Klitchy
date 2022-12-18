@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         //mini: true,
-        backgroundColor: Colors.teal,
+        backgroundColor: Color(0xFF006C81),
         elevation: 4,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -75,10 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: FABBottomAppBar(
-        color: Colors.black,
+        color: Colors.white,
         selectedColor: Colors.white,
         notchedShape: const CircularNotchedRectangle(),
-        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.6),
+        backgroundColor: Color(0xFF006C81),
         onTabSelected: _selectedTab,
         items: [
           FABBottomAppBarItem(

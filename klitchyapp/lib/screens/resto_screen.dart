@@ -7,6 +7,8 @@ import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/category_foods_screen.dart';
 import 'package:klitchyapp/screens/food_details_screen.dart';
+import 'package:klitchyapp/widgets/category_item.dart';
+import 'package:klitchyapp/widgets/food_Item.dart';
 import 'package:klitchyapp/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 
@@ -100,14 +102,12 @@ class _RestoScreenState extends State<RestoScreen> {
   ];
 
   final List<Category> categories = [
-    Category(
-        id: "1", name: "Meat", imgurl: "images/Icon-001.png", restoId: "1"),
-    Category(
-        id: "1", name: "Burger", imgurl: "images/Icon-002.png", restoId: "1"),
-    Category(
-        id: "1", name: "Fastfood", imgurl: "images/Icon-003.png", restoId: "1"),
-    Category(
-        id: "1", name: "Salads", imgurl: "images/Icon-004.png", restoId: "1"),
+    Category(id: "1", name: "Pizza", restoId: "1"),
+    Category(id: "1", name: "FastFood", restoId: "1"),
+    Category(id: "1", name: "Burger", restoId: "1"),
+    Category(id: "1", name: "Spagethi", restoId: "1"),
+    Category(id: "1", name: "Soup", restoId: "1"),
+    Category(id: "1", name: "Breakfest", restoId: "1"),
   ];
 
   final List<Map<String, String>> foodOptions = [
@@ -179,11 +179,11 @@ class _RestoScreenState extends State<RestoScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Hello ${client.name}!',
+                    'Hi, ${client.name}',
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Text(
-                    'Find your Meals',
+                    'What do you want to eat today?',
                     style:
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
@@ -201,19 +201,21 @@ class _RestoScreenState extends State<RestoScreen> {
                 autocorrect: true,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
                     borderSide:
                         BorderSide(color: Colors.grey[300]!, width: 1.0),
                   ),
                   focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
                     borderSide:
-                        BorderSide(color: theme.primaryColor, width: 1.0),
+                        BorderSide(color: Color(0xFFA3A3A3), width: 1.0),
                   ),
-                  prefixIcon: Icon(
+                  suffixIcon: Icon(
                     Icons.search,
                     size: 28.0,
-                    color: theme.primaryColor,
+                    color: Color(0xFFA3A3A3),
                   ),
-                  hintText: 'Find your food',
+                  hintText: 'Search here',
                   hintStyle: TextStyle(
                     color: Colors.grey[400],
                     fontSize: 19.0,
@@ -246,51 +248,58 @@ class _RestoScreenState extends State<RestoScreen> {
                           ),
                         );
                       },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 35.0),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 70,
-                              height: 70,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(5.0),
-                                ),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    category.imgurl,
-                                  ),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.grey[300]!,
-                                    offset: Offset(6.0, 6.0),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Text(
-                              category.name,
-                              style: TextStyle(fontSize: 17.0),
-                            ),
-                          ],
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: CategoryItem(category: category),
                       ),
+                      // child: Container(
+                      //   margin: const EdgeInsets.only(right: 35.0),
+                      //   child: Column(
+                      //     children: <Widget>[
+                      //       Container(
+                      //         width: 70,
+                      //         height: 70,
+                      //         margin: const EdgeInsets.only(bottom: 10.0),
+                      //         decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.all(
+                      //             Radius.circular(5.0),
+                      //           ),
+                      //           image: DecorationImage(
+                      //             image: AssetImage(
+                      //               category.imgurl,
+                      //             ),
+                      //           ),
+                      //           boxShadow: [
+                      //             BoxShadow(
+                      //               blurRadius: 10.0,
+                      //               color: Colors.grey[300]!,
+                      //               offset: Offset(6.0, 6.0),
+                      //             )
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         category.name,
+                      //         style: TextStyle(fontSize: 17.0),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     );
                   }),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
               child: Text(
-                'Popular Food',
-                style: TextStyle(fontSize: 21.0),
+                'Recomended for you',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF59495F)),
               ),
             ),
             Container(
-              height: 230.0,
+              height: 260.0,
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 10.0),
                 scrollDirection: Axis.horizontal,
@@ -307,65 +316,67 @@ class _RestoScreenState extends State<RestoScreen> {
                         ),
                       );
                     },
-                    child: FoodCard(
-                      width: size.width / 2 - 30.0,
-                      primaryColor: theme.primaryColor,
-                      productName: product.name,
-                      productPrice: product.price.toString(),
-                      productUrl: product.imgurl,
-                      productClients: "100",
-                      productRate: "4.9",
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                bottom: 10.0,
-                top: 25.0,
-              ),
-              child: Text(
-                'Random Food',
-                style: TextStyle(fontSize: 21.0),
-              ),
-            ),
-            Container(
-              height: 230.0,
-              child: ListView.builder(
-                padding: const EdgeInsets.only(left: 10.0),
-                scrollDirection: Axis.horizontal,
-                itemCount: this.randomFood.length,
-                itemBuilder: (context, index) {
-                  Map<String, String> product = this.randomFood[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        'details',
-                        arguments: {
-                          'product': product,
-                          'index': index,
-                        },
-                      );
-                    },
-                    child: Hero(
-                      tag: 'detail_food$index',
-                      child: FoodCard(
-                        width: size.width / 2 - 30.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: FoodItem(
                         primaryColor: theme.primaryColor,
-                        productName: product['name']!,
-                        productPrice: product['price']!,
-                        productUrl: product['image']!,
-                        productClients: product['clients']!,
-                        productRate: product['rate']!,
+                        productName: product.name,
+                        productPrice: product.price.toString(),
+                        productUrl: product.imgurl,
+                        productClients: "100",
+                        productRate: "4.9",
                       ),
                     ),
                   );
                 },
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     left: 20.0,
+            //     bottom: 10.0,
+            //     top: 25.0,
+            //   ),
+            //   child: Text(
+            //     'Random Food',
+            //     style: TextStyle(fontSize: 21.0),
+            //   ),
+            // ),
+            // Container(
+            //   height: 230.0,
+            //   child: ListView.builder(
+            //     padding: const EdgeInsets.only(left: 10.0),
+            //     scrollDirection: Axis.horizontal,
+            //     itemCount: this.randomFood.length,
+            //     itemBuilder: (context, index) {
+            //       Map<String, String> product = this.randomFood[index];
+            //       return GestureDetector(
+            //         onTap: () {
+            //           Navigator.pushNamed(
+            //             context,
+            //             'details',
+            //             arguments: {
+            //               'product': product,
+            //               'index': index,
+            //             },
+            //           );
+            //         },
+            //         child: Hero(
+            //           tag: 'detail_food$index',
+            //           child: FoodCard(
+            //             width: size.width / 2 - 30.0,
+            //             primaryColor: theme.primaryColor,
+            //             productName: product['name']!,
+            //             productPrice: product['price']!,
+            //             productUrl: product['image']!,
+            //             productClients: product['clients']!,
+            //             productRate: product['rate']!,
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

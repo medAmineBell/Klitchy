@@ -3,6 +3,7 @@ import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/food.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/food_details_screen.dart';
+import 'package:klitchyapp/widgets/category_food_item.dart';
 import 'package:klitchyapp/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
         price: 96.00,
         description: "Chicken Chicken Chicken Chicken",
         restoId: "1",
-        imgurl: "images/plate-001.png"),
+        imgurl: "images/food.jpeg"),
     Food(
         id: "1",
         categoryId: "1",
@@ -112,6 +113,8 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.category.name),
+        titleTextStyle: TextStyle(
+            color: Colors.black, fontSize: 24, fontWeight: FontWeight.w700),
         centerTitle: true,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -124,58 +127,40 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Padding(
-            //   padding: const EdgeInsets.only(
-            //     top: 20.0,
-            //     left: 20.0,
-            //     right: 20.0,
-            //   ),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: <Widget>[
-            //       Text(
-            //         widget.category.name,
-            //         style: const TextStyle(fontSize: 21.0),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 0, 20),
+              child: Text(
+                'Showing ${popularFoods.length} foods',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF59495F)),
+              ),
+            ),
             Expanded(
-              child: GridView.builder(
+              child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: popularFoods.length,
                 itemBuilder: (context, index) {
                   Food product = popularFoods[index];
-                  return SizedBox(
-                    height: 230,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                FoodDetailsScreen(
-                              food: product,
-                            ),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => FoodDetailsScreen(
+                            food: product,
                           ),
-                        );
-                      },
-                      child: FoodCard(
-                        width: size.width / 2,
-                        primaryColor: theme.primaryColor,
-                        productName: product.name,
-                        productPrice: product.price.toString(),
-                        productUrl: product.imgurl,
-                        productClients: "100",
-                        productRate: "4.9",
-                      ),
+                        ),
+                      );
+                    },
+                    child: CategoryFoodItem(
+                      productName: product.name,
+                      productPrice: product.price.toString(),
+                      productUrl: product.imgurl,
+                      productRate: "4.9",
                     ),
                   );
                 },
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  // mainAxisSpacing: 5,
-                  // crossAxisSpacing: 5,
-                ),
               ),
             ),
           ],

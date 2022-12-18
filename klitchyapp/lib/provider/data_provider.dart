@@ -12,9 +12,24 @@ import 'package:klitchyapp/models/tableResto.dart';
 class DataProvider with ChangeNotifier {
   final String serverUrl = "http://10.0.2.2:8081";
   late TableResto tableResto;
-  late Resto resto;
-  late Client client;
-  late Client owner;
+  // late Resto resto;
+  // late Client client;
+  // late Client owner;
+
+  Resto resto = Resto(
+      id: "1",
+      email: "mail",
+      username: "username",
+      password: "password",
+      name: "Plan B",
+      phone: "phone",
+      imgurl: "imgurl",
+      address: "address",
+      canOrder: true,
+      isActive: true,
+      haveEvent: true);
+  Client client = Client(id: "1", name: "name", phone: "phone");
+  Client owner = Client(id: "1", name: "name", phone: "phone");
   List<Category> categories = [];
 
   // void setTableResto(TableResto table) {
@@ -25,6 +40,10 @@ class DataProvider with ChangeNotifier {
   //   Client c = Client(name: name, phone: phone);
   //   client = c;
   // }
+
+  bool isOwner() {
+    return client.id == owner.id;
+  }
 
   //Resto
 
@@ -70,6 +89,19 @@ class DataProvider with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+
+    // result = TableResto(
+    //     id: "1",
+    //     name: "Plan B",
+    //     listclients: "",
+    //     owner: "1",
+    //     qrcode: "1234",
+    //     restoId: "1",
+    //     total: 10,
+    //     status: "open",
+    //     isSplit: false);
+
+    // tableResto = result;
 
     return result;
   }

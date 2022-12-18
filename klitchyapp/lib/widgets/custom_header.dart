@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 class CustomHeader extends StatelessWidget {
   final int quantity;
   final String title;
-  final bool internalScreen;
 
   CustomHeader({
     required this.quantity,
     required this.title,
-    required this.internalScreen,
   });
 
   @override
@@ -17,55 +15,22 @@ class CustomHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        (this.internalScreen)
-            ? GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(left: 10.0),
-                  child: Icon(Icons.arrow_back_ios, size: 28.0),
-                ),
-              )
-            : Container(
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 28.0,
-                  color: Colors.transparent,
-                ),
-              ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(left: 10.0),
+            child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 28.0),
+          ),
+        ),
         Text(
           title,
           style: TextStyle(fontSize: 18.0),
         ),
         Container(
           margin: const EdgeInsets.only(right: 10.0),
-          child: Stack(
-            children: <Widget>[
-              Icon(Icons.shopping_cart_outlined, size: 32.0),
-              Positioned(
-                bottom: 0,
-                right: 12,
-                child: Container(
-                  height: 21.0,
-                  width: 21.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '$quantity',
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        color: theme.primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: Icon(Icons.favorite, color: Colors.white, size: 32.0),
         ),
       ],
     );

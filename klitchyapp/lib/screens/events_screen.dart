@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/widgets/event_item.dart';
 import 'package:provider/provider.dart';
 
 class EventsScreen extends StatefulWidget {
@@ -30,9 +31,43 @@ class _EventsScreenState extends State<EventsScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text("Events"),
                   SizedBox(
-                    height: 50,
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text("Découvrez nos meilleures offres spéciales",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  EventItem(
+                    productUrl: "",
+                    productName: "Sea Food ",
+                    productDesc: "Ostelflow Lounge",
+                    productPrice: "87",
+                  ),
+                  EventItem(
+                    productUrl: "",
+                    productName: "Sea Food ",
+                    productDesc: "Ostelflow Lounge",
+                    productPrice: "87",
+                  ),
+                  EventItem(
+                    productUrl: "",
+                    productName: "Sea Food ",
+                    productDesc: "Ostelflow Lounge",
+                    productPrice: "87",
+                  ),
+                  EventItem(
+                    productUrl: "",
+                    productName: "Sea Food ",
+                    productDesc: "Ostelflow Lounge",
+                    productPrice: "87",
                   ),
                 ],
               ),
