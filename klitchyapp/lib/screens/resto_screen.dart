@@ -101,50 +101,35 @@ class _RestoScreenState extends State<RestoScreen> {
     }
   ];
 
-  final List<Category> categories = [
-    Category(id: "1", name: "Pizza", restoId: "1"),
-    Category(id: "1", name: "FastFood", restoId: "1"),
-    Category(id: "1", name: "Burger", restoId: "1"),
-    Category(id: "1", name: "Spagethi", restoId: "1"),
-    Category(id: "1", name: "Soup", restoId: "1"),
-    Category(id: "1", name: "Breakfest", restoId: "1"),
+  List<Category> categories = [
+    // Category(id: "1", name: "Pizza", restoId: "1"),
+    // Category(id: "1", name: "FastFood", restoId: "1"),
+    // Category(id: "1", name: "Burger", restoId: "1"),
+    // Category(id: "1", name: "Spagethi", restoId: "1"),
+    // Category(id: "1", name: "Soup", restoId: "1"),
+    // Category(id: "1", name: "Breakfest", restoId: "1"),
   ];
 
-  final List<Map<String, String>> foodOptions = [
-    {
-      'name': 'Proteins',
-      'image': 'images/Icon-001.png',
-    },
-    {
-      'name': 'Burger',
-      'image': 'images/Icon-002.png',
-    },
-    {
-      'name': 'Fastfood',
-      'image': 'images/Icon-003.png',
-    },
-    {
-      'name': 'Salads',
-      'image': 'images/Icon-004.png',
-    }
-  ];
-
-  late List<Map<String, String>> randomFood;
   late Client client;
   late Resto resto;
+
+  List<Food> foods = [];
 
   @override
   void initState() {
     super.initState();
-    randomFood = popularFood.reversed.toList();
     client = Provider.of<DataProvider>(context, listen: false).client;
     resto = Provider.of<DataProvider>(context, listen: false).resto;
+    Provider.of<DataProvider>(context, listen: false).getFoods();
+    Provider.of<DataProvider>(context, listen: false).getCategories();
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Size size = MediaQuery.of(context).size;
+
+    foods = Provider.of<DataProvider>(context).foods;
+    categories = Provider.of<DataProvider>(context).categories;
 
     return SingleChildScrollView(
       child: SafeArea(
@@ -182,7 +167,7 @@ class _RestoScreenState extends State<RestoScreen> {
                     'Hi, ${client.name}',
                     style: TextStyle(fontSize: 16.0),
                   ),
-                  Text(
+                  const Text(
                     'What do you want to eat today?',
                     style:
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
@@ -208,9 +193,9 @@ class _RestoScreenState extends State<RestoScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide:
-                        BorderSide(color: Color(0xFFA3A3A3), width: 1.0),
+                        const BorderSide(color: Color(0xFFA3A3A3), width: 1.0),
                   ),
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     Icons.search,
                     size: 28.0,
                     color: Color(0xFFA3A3A3),
@@ -303,9 +288,9 @@ class _RestoScreenState extends State<RestoScreen> {
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 10.0),
                 scrollDirection: Axis.horizontal,
-                itemCount: popularFoods.length,
+                itemCount: foods.length,
                 itemBuilder: (context, index) {
-                  Food product = popularFoods[index];
+                  Food product = foods[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(

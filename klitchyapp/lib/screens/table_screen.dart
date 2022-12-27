@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/client.dart';
+import 'package:klitchyapp/models/order.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/widgets/table_order_item.dart';
 import 'package:provider/provider.dart';
 
 class TableScreen extends StatefulWidget {
@@ -19,6 +21,9 @@ class _TableScreenState extends State<TableScreen> {
   late TableResto tableResto;
   late Client owner;
   late Client client;
+  List<Order> orders = [];
+
+  double total = 0;
 
   @override
   void initState() {
@@ -27,10 +32,13 @@ class _TableScreenState extends State<TableScreen> {
     tableResto = Provider.of<DataProvider>(context, listen: false).tableResto;
     owner = Provider.of<DataProvider>(context, listen: false).owner;
     client = Provider.of<DataProvider>(context, listen: false).client;
+    Provider.of<DataProvider>(context, listen: false).getOrders();
   }
 
   @override
   Widget build(BuildContext context) {
+    orders = Provider.of<DataProvider>(context).orders;
+    total = 0;
     return WillPopScope(
         onWillPop: () {
           SystemNavigator.pop();
@@ -101,58 +109,19 @@ class _TableScreenState extends State<TableScreen> {
                                 ],
                               ),
                             ),
-                            ListTile(
-                              subtitle: Text(
-                                "Medium Spicy Spagethi ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.grey[700],
-                                  fontSize: 14,
-                                ),
-                              ),
-                              title: Text(
-                                "X2",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: Text(
-                                "21 DT",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            ListTile(
-                              subtitle: Text(
-                                "Medium Spicy Spagethi ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.grey[700],
-                                  fontSize: 14,
-                                ),
-                              ),
-                              title: Text(
-                                "X2",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: Text(
-                                "21 DT",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
+                            ...orders.map((e) {
+                              final food = Provider.of<DataProvider>(context,
+                                      listen: false)
+                                  .foods
+                                  .firstWhere(
+                                      (element) => element.id == e.foodId);
+                              total += food.price * e.qty;
+                              return TableOrderItem(
+                                qty: e.qty.toString(),
+                                name: food.name,
+                                total: food.price.toStringAsFixed(2),
+                              );
+                            }).toList(),
                             Divider(
                               thickness: 2,
                             ),
@@ -177,7 +146,7 @@ class _TableScreenState extends State<TableScreen> {
                                       width: 20,
                                     ),
                                     Text(
-                                      "48 DT",
+                                      "$total DT",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16,
@@ -348,42 +317,42 @@ class _TableScreenState extends State<TableScreen> {
                 ),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              tileColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              leading: Icon(
-                Icons.person_outline,
-                size: 40,
-                color: Theme.of(context).primaryColor,
-              ),
-              subtitle: Text(
-                "Guest",
-                style: TextStyle(
-                  // fontWeight: FontWeight.w600,
-                  color: Colors.grey[700], fontSize: 16,
-                ),
-              ),
-              title: Text(
-                owner.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-              trailing: Text(
-                "7 DT",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(bottom: 10),
+          //   child: ListTile(
+          //     tileColor: Colors.white,
+          //     shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(20)),
+          //     leading: Icon(
+          //       Icons.person_outline,
+          //       size: 40,
+          //       color: Theme.of(context).primaryColor,
+          //     ),
+          //     subtitle: Text(
+          //       "Guest",
+          //       style: TextStyle(
+          //         // fontWeight: FontWeight.w600,
+          //         color: Colors.grey[700], fontSize: 16,
+          //       ),
+          //     ),
+          //     title: Text(
+          //       owner.name,
+          //       style: TextStyle(
+          //         fontWeight: FontWeight.w500,
+          //         fontSize: 16,
+          //         color: Colors.black,
+          //       ),
+          //     ),
+          //     trailing: Text(
+          //       "7 DT",
+          //       style: TextStyle(
+          //         fontWeight: FontWeight.w600,
+          //         fontSize: 16,
+          //         color: Colors.black,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

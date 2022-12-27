@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantPreviewScreen extends StatelessWidget {
   const RestaurantPreviewScreen({Key? key}) : super(key: key);
@@ -116,6 +118,10 @@ class RestaurantPreviewScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 20),
                 child: InkWell(
                   onTap: () async {
+                    await Provider.of<DataProvider>(context, listen: false)
+                        .getFoods();
+                    await Provider.of<DataProvider>(context, listen: false)
+                        .getCategories();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => HomeScreen(),

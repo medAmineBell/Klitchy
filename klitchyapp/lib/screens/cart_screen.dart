@@ -3,6 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:klitchyapp/app_constants.dart';
+import 'package:klitchyapp/models/client.dart';
+import 'package:klitchyapp/models/food.dart';
+import 'package:klitchyapp/models/resto.dart';
+import 'package:klitchyapp/models/tableResto.dart';
+import 'package:klitchyapp/provider/cart_provider.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -12,58 +20,23 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final List<Map<String, String>> foods = [
-    {
-      'name': 'Rice and meat',
-      'price': '13.00',
-      'rate': '4.8',
-      'clients': '150',
-      'image': 'images/plate-003.png'
-    },
-    {
-      'name': 'Vegan food',
-      'price': '10.00',
-      'rate': '4.2',
-      'clients': '150',
-      'image': 'images/plate-007.png'
-    },
-    {
-      'name': 'Rice and meat',
-      'price': '13.00',
-      'rate': '4.8',
-      'clients': '150',
-      'image': 'images/plate-003.png'
-    },
-    {
-      'name': 'Vegan food',
-      'price': '10.00',
-      'rate': '4.2',
-      'clients': '150',
-      'image': 'images/plate-007.png'
-    },
-    {
-      'name': 'Rice and meat',
-      'price': '13.00',
-      'rate': '4.8',
-      'clients': '150',
-      'image': 'images/plate-003.png'
-    },
-    {
-      'name': 'Vegan food',
-      'price': '10.00',
-      'rate': '4.2',
-      'clients': '150',
-      'image': 'images/plate-007.png'
-    },
-  ];
+  late Resto resto;
+  late TableResto tableResto;
+  late Client client;
 
-  int qty = 1;
+  @override
+  void initState() {
+    super.initState();
+    resto = Provider.of<DataProvider>(context, listen: false).resto;
+    tableResto = Provider.of<DataProvider>(context, listen: false).tableResto;
+    client = Provider.of<DataProvider>(context, listen: false).owner;
+  }
 
-  Widget renderAddList() {
+  Widget renderAddList(CartProvider cart) {
     return ListView.builder(
-      itemCount: foods.length,
+      itemCount: cart.itemCount,
       itemBuilder: (BuildContext context, int index) {
-        Map<String, String> food = foods[index];
+        Food food = cart.items.values.toList()[index].food;
         Color primaryColor = Theme.of(context).primaryColor;
         return Container(
           margin: const EdgeInsets.only(bottom: 10.0),
@@ -76,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
                   width: 100,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(food['image']!),
+                      image: NetworkImage(AppConstants.serverUrl + food.imgurl),
                     ),
                   ),
                 ),
@@ -90,21 +63,28 @@ class _CartScreenState extends State<CartScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(food['name']!),
-                            const Icon(
-                              Icons.delete_outline,
-                              color: Colors.red,
-                            )
+                            Text(food.name),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  cart.removeItem(food.id);
+                                });
+                              },
+                              icon: Icon(
+                                Icons.delete_outline,
+                                color: Colors.red,
+                              ),
+                            ),
                           ],
                         ),
-                        Text('\$${food['price']}'),
+                        Text('\$${food.price}'),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  qty--;
+                                  cart.removeSingleItem(food.id);
                                 });
                               },
                               child: const Icon(Icons.remove),
@@ -119,7 +99,10 @@ class _CartScreenState extends State<CartScreen> {
                                 horizontal: 12.0,
                               ),
                               child: Text(
-                                qty.toString(),
+                                cart.items.values
+                                    .toList()[index]
+                                    .quantity
+                                    .toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
@@ -128,7 +111,7 @@ class _CartScreenState extends State<CartScreen> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  qty++;
+                                  cart.addSingleItem(food.id);
                                 });
                               },
                               child: const Icon(Icons.add),
@@ -150,7 +133,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
+    final cart = Provider.of<CartProvider>(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -171,7 +154,7 @@ class _CartScreenState extends State<CartScreen> {
                 child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: renderAddList(),
+                      child: renderAddList(cart),
                     ),
                     const SizedBox(
                       height: 10,
@@ -185,7 +168,7 @@ class _CartScreenState extends State<CartScreen> {
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
-                          "DT 100",
+                          cart.totalAmount.toStringAsFixed(2) + " DT",
                           style: TextStyle(
                               color: theme.primaryColor,
                               fontWeight: FontWeight.bold,
@@ -196,19 +179,42 @@ class _CartScreenState extends State<CartScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5.0,
-                        horizontal: 20.0,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: theme.primaryColor,
-                      ),
-                      child: const Text(
-                        'CHECKOUT',
-                        style: TextStyle(
-                          color: Colors.white,
+                    InkWell(
+                      onTap: () async {
+                        if (cart.canOrder) {
+                          final orderNum = client.id +
+                              resto.id +
+                              tableResto.id +
+                              DateTime.now().year.toString() +
+                              DateTime.now().month.toString() +
+                              DateTime.now().day.toString() +
+                              DateTime.now().hour.toString() +
+                              DateTime.now().minute.toString() +
+                              DateTime.now().second.toString();
+
+                          cart.items.forEach((key, cartItem) async {
+                            final total =
+                                cartItem.food.price * cartItem.quantity;
+
+                            await Provider.of<DataProvider>(context,
+                                    listen: false)
+                                .addOrder(total, orderNum, cartItem.quantity,
+                                    cartItem.food.id);
+                          });
+                          cart.clear();
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: theme.primaryColor,
+                        ),
+                        child: const Text(
+                          'CHECKOUT',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

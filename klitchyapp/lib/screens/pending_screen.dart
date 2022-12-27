@@ -16,8 +16,6 @@ class PendingScreen extends StatefulWidget {
 }
 
 class _PendingScreenState extends State<PendingScreen> {
-  TextEditingController telcontroller = TextEditingController();
-  TextEditingController namecontroller = TextEditingController();
   late Resto resto;
   late TableResto tableResto;
   late Client owner;

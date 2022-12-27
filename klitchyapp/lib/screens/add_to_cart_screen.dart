@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:klitchyapp/models/food.dart';
+import 'package:klitchyapp/provider/cart_provider.dart';
+import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/widgets/custom_header.dart';
+import 'package:provider/provider.dart';
 
 class AddToCartScreen extends StatefulWidget {
   final Food food;
@@ -11,7 +14,7 @@ class AddToCartScreen extends StatefulWidget {
 }
 
 class _AddToCartScreenState extends State<AddToCartScreen> {
-  int quantity = 0;
+  int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +261,17 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             padding: const EdgeInsets.only(
                                 top: 20, left: 30, right: 30, bottom: 60),
                             child: InkWell(
-                              onTap: () async {},
+                              onTap: () async {
+                                Provider.of<CartProvider>(context,
+                                        listen: false)
+                                    .addItem(widget.food, quantity);
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        HomeScreen(),
+                                  ),
+                                );
+                              },
                               child: Container(
                                 width: double.infinity,
                                 height: 60,

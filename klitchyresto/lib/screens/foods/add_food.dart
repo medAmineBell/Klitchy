@@ -1,19 +1,21 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddCategoryScreen extends StatefulWidget {
+class AddFoodScreen extends StatefulWidget {
   @override
-  _AddCategoryScreenState createState() => _AddCategoryScreenState();
+  _AddFoodScreenState createState() => _AddFoodScreenState();
 }
 
-class _AddCategoryScreenState extends State<AddCategoryScreen> {
+class _AddFoodScreenState extends State<AddFoodScreen> {
   TextEditingController namecontroller = TextEditingController();
+  TextEditingController pricecontroller = TextEditingController();
 
   bool _validatname = false;
+  bool _validatprice = false;
 
   late Image image;
   late DateTime _date;
@@ -89,7 +91,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add a category',
+          'Add a food',
         ),
         backgroundColor: Colors.grey[50],
         elevation: 0,
@@ -119,8 +121,27 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                       autofocus: false,
                       controller: namecontroller,
                       decoration: InputDecoration(
-                        labelText: 'Category name',
-                        errorText: _validatname ? 'Category name empty' : null,
+                        labelText: 'Food name',
+                        errorText: _validatname ? 'Food name empty' : null,
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      autofocus: false,
+                      controller: pricecontroller,
+                      decoration: InputDecoration(
+                        labelText: 'Food price',
+                        errorText: _validatprice ? 'Food price empty' : null,
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                         border: OutlineInputBorder(
@@ -156,22 +177,6 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                                 icon: Icon(Icons.refresh)),
                           ],
                         )
-
-                        // ElevatedButton(
-                        //   onPressed: getImage,
-                        //   child: Text(
-                        //     "Choose image",
-                        //     style: TextStyle(
-                        //       fontSize: 14.0,
-                        //       color: Colors.white,
-                        //     ),
-                        //   ),
-                        //   style: ElevatedButton.styleFrom(
-                        //     primary: Theme.of(context).primaryColor,
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10)),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -192,24 +197,34 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                           namecontroller.text.isEmpty
                               ? _validatname = true
                               : _validatname = false;
+                          pricecontroller.text.isEmpty
+                              ? _validatprice = true
+                              : _validatprice = false;
                         });
                         if (namecontroller.text.isNotEmpty &&
+                            pricecontroller.text.isNotEmpty &&
                             _imageFileList != null) {
                           setState(() {
                             isLoading = true;
                           });
                           await Provider.of<DataProvider>(context,
                                   listen: false)
-                              .addCategoryAPI(
-                                  namecontroller.text, _imageFileList.first);
-
+                              .addFood(
+                                  _imageFileList.first,
+                                  namecontroller.text,
+                                  pricecontroller.text,
+                                  "23");
+                          await Provider.of<DataProvider>(context,
+                                  listen: false)
+                              .getFoods();
                           setState(() {
                             isLoading = false;
                           });
+                          Navigator.of(context).pop();
                         }
                       },
                       child: Text(
-                        "Upload",
+                        "Add Food",
                         style: TextStyle(
                           fontSize: 14.0,
                           color: Colors.white,

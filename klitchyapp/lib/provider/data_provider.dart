@@ -6,31 +6,36 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/client.dart';
+import 'package:klitchyapp/models/food.dart';
+import 'package:klitchyapp/models/order.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 
 class DataProvider with ChangeNotifier {
   final String serverUrl = "http://10.0.2.2:8081";
   late TableResto tableResto;
-  // late Resto resto;
-  // late Client client;
-  // late Client owner;
+  late Resto resto;
+  late Client client;
+  late Client owner;
 
-  Resto resto = Resto(
-      id: "1",
-      email: "mail",
-      username: "username",
-      password: "password",
-      name: "Plan B",
-      phone: "phone",
-      imgurl: "imgurl",
-      address: "address",
-      canOrder: true,
-      isActive: true,
-      haveEvent: true);
-  Client client = Client(id: "1", name: "name", phone: "phone");
-  Client owner = Client(id: "1", name: "name", phone: "phone");
+  // Resto resto = Resto(
+  //     id: "1",
+  //     email: "mail",
+  //     username: "username",
+  //     password: "password",
+  //     name: "Plan B",
+  //     phone: "phone",
+  //     imgurl: "imgurl",
+  //     address: "address",
+  //     canOrder: true,
+  //     isActive: true,
+  //     haveEvent: true);
+  // Client client = Client(id: "1", name: "name", phone: "phone");
+  // Client owner = Client(id: "1", name: "name", phone: "phone");
   List<Category> categories = [];
+  List<Food> foods = [];
+  List<Order> orders = [];
+  List<Order> allorders = [];
 
   // void setTableResto(TableResto table) {
   //   tableResto = table;
@@ -114,6 +119,7 @@ class DataProvider with ChangeNotifier {
       "owner": client.id,
       "listclients": client.id
     });
+    owner = client;
   }
 
   //Client
@@ -183,75 +189,101 @@ class DataProvider with ChangeNotifier {
     }
   }
 
-  //Test
-  // Future<void> addCategoryAPI(String name, XFile image) async {
-  //   final imgurl = await uploadFileAPI(image);
-  //   final url = serverUrl + '/api/categories';
-  //   final response = await http.post(Uri.parse(url),
-  //       body: {"restoId": resto.id, "name": name, "imgurl": imgurl});
+  //Foods
 
-  //   print(response.body);
-  // }
+  Future<void> getFoods() async {
+    final url = '$serverUrl/api/foods/resto/${resto.id}';
 
-  // Future<String> uploadFileAPI(XFile image) async {
-  //   String imgurl = "";
-  //   var request = http.MultipartRequest(
-  //       'POST', Uri.parse(serverUrl + '/api/uploadFile/upload'));
+    final response = await http.get(
+      Uri.parse(url),
+    );
 
-  //   request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    try {
+      final foodData = json.decode(response.body) as List<dynamic>;
+      print(foodData);
+      if (foodData != null) {
+        foods = [];
+        foodData.forEach((element) {
+          final food = Food.fromJson(element);
+          foods.add(food);
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    notifyListeners();
+  }
 
-  //   http.StreamedResponse response = await request.send();
+//Categories
+  Future<void> getCategories() async {
+    final url = '$serverUrl/api/categories/resto/${resto.id}';
 
-  //   if (response.statusCode == 200) {
-  //     final bodyres = await response.stream.bytesToString();
-  //     final extractedData = json.decode(bodyres) as Map<String, dynamic>;
+    final response = await http.get(
+      Uri.parse(url),
+    );
 
-  //     imgurl = extractedData['filename'];
-  //   } else {
-  //     print(response.reasonPhrase);
-  //   }
+    try {
+      final categoryData = json.decode(response.body) as List<dynamic>;
 
-  //   return imgurl;
-  // }
+      if (categoryData != null) {
+        categories = [];
+        categoryData.forEach((element) {
+          final cat = Category.fromJson(element);
+          categories.add(cat);
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    notifyListeners();
+  }
 
-  Future<void> addCategoryAPI(String name, XFile image) async {
-    var request =
-        http.MultipartRequest('POST', Uri.parse(serverUrl + '/api/categories'));
+  //Order
+  Future<void> addOrder(
+      double total, String orderNum, int qty, String foodId) async {
+    final url = serverUrl + '/api/orders';
+    print(resto.id);
 
-    request.files.add(await http.MultipartFile.fromPath('file', image.path));
-
-    request.fields.addAll({
-      'name': name,
-      'restoId': "1",
-    });
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-    } else {
-      print(response.reasonPhrase);
+    try {
+      await http.post(Uri.parse(url), body: {
+        "total": total.toStringAsFixed(2),
+        "orderNum": orderNum,
+        "qty": qty.toString(),
+        "foodId": foodId,
+        "tableRestoId": tableResto.id,
+        "clientId": client.id,
+        "restoId": resto.id,
+      });
+    } catch (e) {
+      print(e.toString());
     }
   }
 
-  Future<String> uploadFileAPI(XFile image) async {
-    String imgurl = "";
-    var request = http.MultipartRequest(
-        'POST', Uri.parse(serverUrl + '/api/uploadFile/upload'));
+  Future<void> getOrders() async {
+    final url = '$serverUrl/api/orders/resto/${resto.id}';
 
-    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    final response = await http.get(
+      Uri.parse(url),
+    );
 
-    http.StreamedResponse response = await request.send();
+    try {
+      final orderData = json.decode(response.body) as List<dynamic>;
 
-    if (response.statusCode == 200) {
-      final bodyres = await response.stream.bytesToString();
-      final extractedData = json.decode(bodyres) as Map<String, dynamic>;
+      if (orderData != null) {
+        orders = [];
+        allorders = [];
+        orderData.forEach((element) {
+          final order = Order.fromJson(element);
+          allorders.add(order);
 
-      imgurl = extractedData['filename'];
-    } else {
-      print(response.reasonPhrase);
+          if (tableResto.id == order.tableId && order.status != "Completed") {
+            orders.add(order);
+          }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
     }
-
-    return imgurl;
+    notifyListeners();
   }
 }

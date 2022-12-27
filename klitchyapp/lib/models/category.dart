@@ -10,16 +10,16 @@ class Category {
   });
 
   Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'].toString();
     name = json['name'];
-    restoId = json['restoId'];
+    restoId = json['restoId'].toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = id;
+    data['id'] = id.toString();
     data['name'] = name;
-    data['restoId'] = restoId;
+    data['restoId'] = restoId.toString();
 
     return data;
   }
