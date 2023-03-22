@@ -101,14 +101,7 @@ class _RestoScreenState extends State<RestoScreen> {
     }
   ];
 
-  List<Category> categories = [
-    // Category(id: "1", name: "Pizza", restoId: "1"),
-    // Category(id: "1", name: "FastFood", restoId: "1"),
-    // Category(id: "1", name: "Burger", restoId: "1"),
-    // Category(id: "1", name: "Spagethi", restoId: "1"),
-    // Category(id: "1", name: "Soup", restoId: "1"),
-    // Category(id: "1", name: "Breakfest", restoId: "1"),
-  ];
+  List<Category> categories = [];
 
   late Client client;
   late Resto resto;

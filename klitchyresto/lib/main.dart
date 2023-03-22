@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
-import 'package:klitchyresto/screens/category/add_category_screen.dart';
-import 'package:klitchyresto/screens/category/categories_screen.dart';
-import 'package:klitchyresto/screens/foods/add_food.dart';
+import 'package:klitchyresto/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 main() async {
@@ -41,12 +39,14 @@ class _MyAppState extends State<MyApp> {
         title: 'Klitchy Resto',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Color.fromRGBO(0, 108, 129, 1),
-          textTheme: GoogleFonts.latoTextTheme(
-            Theme.of(context).textTheme,
-          ),
-        ),
-        home: CategoriesScreen(),
+            primaryColor: Color.fromRGBO(0, 108, 129, 1),
+            textTheme: GoogleFonts.latoTextTheme(
+              Theme.of(context).textTheme,
+            ),
+            appBarTheme: Theme.of(context).appBarTheme.copyWith(
+                  color: Color.fromRGBO(0, 108, 129, 1),
+                )),
+        home: LoginScreen(),
       ),
     );
   }

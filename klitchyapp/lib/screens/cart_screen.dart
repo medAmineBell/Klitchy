@@ -10,6 +10,7 @@ import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/cart_provider.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/screens/thank_order_screen.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -202,6 +203,11 @@ class _CartScreenState extends State<CartScreen> {
                                     cartItem.food.id);
                           });
                           cart.clear();
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => ThankScreen(),
+                            ),
+                          );
                         }
                       },
                       child: Container(

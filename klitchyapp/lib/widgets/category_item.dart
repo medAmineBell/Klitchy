@@ -18,14 +18,10 @@ class CategoryItem extends StatelessWidget {
             width: 65,
             height: 65,
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                image: DecorationImage(
+                  image: NetworkImage(AppConstants.serverUrl + category.imgurl),
+                ),
                 borderRadius: BorderRadius.circular(16)),
-            child: Center(
-              child: AppConstants.categories
-                  .firstWhere((element) => element.containsKey(category.name))
-                  .values
-                  .first as Icon,
-            ),
           ),
           SizedBox(
             height: 10,

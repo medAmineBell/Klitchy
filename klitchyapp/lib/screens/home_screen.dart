@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/cart_screen.dart';
-import 'package:klitchyapp/screens/events_screen.dart';
-import 'package:klitchyapp/screens/orders_screen.dart';
+import 'package:klitchyapp/screens/events/events_screen.dart';
 import 'package:klitchyapp/screens/profile_screen.dart';
 import 'package:klitchyapp/screens/resto_screen.dart';
 import 'package:klitchyapp/screens/table_screen.dart';
 import 'package:klitchyapp/widgets/fab_bottom_app_bar.dart';
-import 'package:provider/provider.dart';
-import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -76,26 +72,30 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: FABBottomAppBar(
         color: Colors.white,
-        selectedColor: Colors.white,
+        selectedColor: Colors.black,
         notchedShape: const CircularNotchedRectangle(),
         backgroundColor: Color(0xFF006C81),
         onTabSelected: _selectedTab,
         items: [
           FABBottomAppBarItem(
             iconData: Icons.menu_book,
-            text: 'Menu',
+            //text: 'Menu',
+            text: '',
           ),
           FABBottomAppBarItem(
             iconData: Icons.table_restaurant_outlined,
-            text: 'Table',
+            //text: 'Table',
+            text: '',
           ),
           FABBottomAppBarItem(
             iconData: Icons.view_list_outlined,
-            text: 'Events',
+            //text: 'Events',
+            text: '',
           ),
           FABBottomAppBarItem(
             iconData: Icons.person,
-            text: 'Profile',
+            //text: 'Profile',
+            text: '',
           ),
         ],
         centerItemText: '',

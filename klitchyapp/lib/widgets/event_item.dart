@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/app_constants.dart';
+import 'package:klitchyapp/models/event.dart';
 
 class EventItem extends StatelessWidget {
-  final String productUrl, productName, productPrice, productDesc;
+  final Event event;
 
-  EventItem({
-    required this.productUrl,
-    required this.productName,
-    required this.productPrice,
-    required this.productDesc,
-  });
+  const EventItem({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,7 @@ class EventItem extends StatelessWidget {
                   ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage("images/event.jpeg"),
+                    image: NetworkImage(AppConstants.serverUrl + event.imgurl),
                   ),
                 ),
                 width: double.infinity,
@@ -53,7 +50,7 @@ class EventItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          productName,
+                          event.name,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -64,7 +61,7 @@ class EventItem extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          productDesc,
+                          event.description,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 12.0,
@@ -73,13 +70,30 @@ class EventItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text(
-                      '$productPrice DT',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        //color: Color(0xFF006C81),
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.price == "0" ? "Free" : event.price + " DT",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            //color: Color(0xFF006C81),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          event.date,
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            //color: Color(0xFF006C81),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/app_constants.dart';
+import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class RestaurantPreviewScreen extends StatelessWidget {
-  const RestaurantPreviewScreen({Key? key}) : super(key: key);
+  final Resto resto;
+  const RestaurantPreviewScreen({Key? key, required this.resto})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +45,8 @@ class RestaurantPreviewScreen extends StatelessWidget {
         // ),
         body: Stack(
           children: [
-            Image.asset(
-              "images/kamkoum.jpeg",
+            Image.network(
+              AppConstants.serverUrl + resto.coverimgurl,
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
@@ -73,7 +77,9 @@ class RestaurantPreviewScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(11),
                       image: DecorationImage(
-                          image: Image.asset("images/kamkoum.jpeg").image,
+                          image: Image.network(
+                                  AppConstants.serverUrl + resto.imgurl)
+                              .image,
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -92,7 +98,7 @@ class RestaurantPreviewScreen extends StatelessWidget {
                     children: [
                       Text(
                         textAlign: TextAlign.center,
-                        "9am9oum Nabeul",
+                        resto.name,
                         style: TextStyle(
                             fontSize: 25,
                             color: Colors.white,
@@ -122,7 +128,8 @@ class RestaurantPreviewScreen extends StatelessWidget {
                         .getFoods();
                     await Provider.of<DataProvider>(context, listen: false)
                         .getCategories();
-                    Navigator.of(context).push(
+
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (BuildContext context) => HomeScreen(),
                       ),

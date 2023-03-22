@@ -6,6 +6,7 @@ class Resto {
   late String name;
   late String phone;
   late String imgurl;
+  late String coverimgurl;
   late String address;
   late bool canOrder;
   late bool isActive;
@@ -19,6 +20,7 @@ class Resto {
     required this.name,
     required this.phone,
     required this.imgurl,
+    required this.coverimgurl,
     required this.address,
     required this.canOrder,
     required this.isActive,
@@ -33,6 +35,7 @@ class Resto {
     name = json["name"].toString();
     phone = json["phone"].toString();
     imgurl = json["imgurl"].toString();
+    coverimgurl = json["coverimgurl"].toString();
     address = json["address"].toString();
     canOrder = json["canOrder"];
     isActive = json["isActive"];

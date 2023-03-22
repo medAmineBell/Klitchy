@@ -34,7 +34,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => AddCategoryScreen(),
+                    builder: (BuildContext context) => AddCategoryScreen(
+                      categories: categories,
+                    ),
                   ),
                 );
               },

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:klitchyresto/models/category.dart';
 import 'package:klitchyresto/models/food.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
-import 'package:klitchyresto/screens/category/add_category_screen.dart';
 import 'package:klitchyresto/screens/foods/add_food.dart';
 import 'package:klitchyresto/widgets/app_drawer.dart';
-import 'package:klitchyresto/widgets/category_item.dart';
 import 'package:klitchyresto/widgets/food_item.dart';
 import 'package:provider/provider.dart';
 

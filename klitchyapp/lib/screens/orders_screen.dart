@@ -1,8 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:klitchyapp/models/food.dart';
 import 'package:klitchyapp/models/order.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
@@ -57,7 +53,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
         );
       }
     });
-    print(myorders.length);
   }
 
   Widget buildOrder(String num, List<Order> orders) {

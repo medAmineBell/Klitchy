@@ -169,7 +169,9 @@ class _CreateClientScreenState extends State<CreateClientScreen> {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              RestaurantPreviewScreen(),
+                              RestaurantPreviewScreen(
+                            resto: resto,
+                          ),
                         ),
                       );
                     } else {

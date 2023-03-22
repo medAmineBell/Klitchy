@@ -1,11 +1,13 @@
+import 'package:dialog_alert/dialog_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/client.dart';
 import 'package:klitchyapp/models/order.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
+import 'package:klitchyapp/models/userItem.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/widgets/split_bill.dart';
 import 'package:klitchyapp/widgets/table_order_item.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +24,7 @@ class _TableScreenState extends State<TableScreen> {
   late Client owner;
   late Client client;
   List<Order> orders = [];
+  Map<String, UserItem> listTableUsers = {};
 
   double total = 0;
 
@@ -33,12 +36,17 @@ class _TableScreenState extends State<TableScreen> {
     owner = Provider.of<DataProvider>(context, listen: false).owner;
     client = Provider.of<DataProvider>(context, listen: false).client;
     Provider.of<DataProvider>(context, listen: false).getOrders();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //Provider.of<DataProvider>(context, listen: false).getListTableUsers();
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     orders = Provider.of<DataProvider>(context).orders;
     total = 0;
+    //listTableUsers = Provider.of<DataProvider>(context).listTableUsers;
     return WillPopScope(
         onWillPop: () {
           SystemNavigator.pop();
@@ -172,7 +180,21 @@ class _TableScreenState extends State<TableScreen> {
                       ),
                     ),
                   ),
-                  buildListUsers(),
+                  FutureBuilder(
+                    future: Provider.of<DataProvider>(context, listen: false)
+                        .getListTableUsers(orders),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        listTableUsers = snapshot.data as Map<String, UserItem>;
+
+                        return buildListUsers(
+                            snapshot.data as Map<String, UserItem>);
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: 30,
                   ),
@@ -183,7 +205,15 @@ class _TableScreenState extends State<TableScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 50),
                           child: InkWell(
-                            onTap: () async {},
+                            onTap: () async {
+                              await showDialog(
+                                context: this.context,
+                                builder: (BuildContext context) => SplitBill(
+                                  listTableUsers: listTableUsers,
+                                  ownerId: owner.id,
+                                ),
+                              );
+                            },
                             child: Container(
                               width: 160,
                               height: 50,
@@ -210,7 +240,22 @@ class _TableScreenState extends State<TableScreen> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 50),
                           child: InkWell(
-                            onTap: () async {},
+                            onTap: () async {
+                              final result = await showDialogAlert(
+                                context: context,
+                                title: 'Pay All',
+                                message: 'Do you want to Pay all?',
+                                actionButtonTitle: 'Yes',
+                                cancelButtonTitle: 'Cancel',
+                              );
+                              if (result!.index == 0) {
+                                for (var order in orders) {
+                                  await Provider.of<DataProvider>(context,
+                                          listen: false)
+                                      .payOrder(order.id);
+                                }
+                              }
+                            },
                             child: Container(
                               width: 160,
                               height: 50,
@@ -240,15 +285,15 @@ class _TableScreenState extends State<TableScreen> {
         ));
   }
 
-  Widget buildListUsers() {
+  Widget buildListUsers(Map<String, UserItem> listTableUsers) {
     return Padding(
       padding: EdgeInsets.only(top: 20, right: 16, left: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (owner.id == client.id)
-            Padding(
+          ...listTableUsers.keys.map((user) {
+            return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: ListTile(
                 tileColor: Colors.white,
@@ -260,99 +305,30 @@ class _TableScreenState extends State<TableScreen> {
                   color: Theme.of(context).primaryColor,
                 ),
                 subtitle: Text(
-                  "Owner",
+                  client.id == user ? "Me" : "Guest",
                   style: TextStyle(
                     // fontWeight: FontWeight.w600,
-                    color: Colors.grey[700], fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
                 title: Text(
-                  owner.name,
+                  listTableUsers[user]!.name,
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    // fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
                 ),
                 trailing: Text(
-                  "21 DT",
+                  listTableUsers[user]!.total.toStringAsFixed(2),
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.black,
                   ),
                 ),
               ),
-            ),
-          if (owner.id != client.id)
-            ListTile(
-              tileColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              leading: Icon(
-                Icons.person_outline,
-                size: 40,
-                color: Theme.of(context).primaryColor,
-              ),
-              subtitle: Text(
-                "Me",
-                style: TextStyle(
-                  // fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              title: Text(
-                owner.name,
-                style: TextStyle(
-                  // fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              trailing: Text(
-                "16 DT",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          // Padding(
-          //   padding: const EdgeInsets.only(bottom: 10),
-          //   child: ListTile(
-          //     tileColor: Colors.white,
-          //     shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(20)),
-          //     leading: Icon(
-          //       Icons.person_outline,
-          //       size: 40,
-          //       color: Theme.of(context).primaryColor,
-          //     ),
-          //     subtitle: Text(
-          //       "Guest",
-          //       style: TextStyle(
-          //         // fontWeight: FontWeight.w600,
-          //         color: Colors.grey[700], fontSize: 16,
-          //       ),
-          //     ),
-          //     title: Text(
-          //       owner.name,
-          //       style: TextStyle(
-          //         fontWeight: FontWeight.w500,
-          //         fontSize: 16,
-          //         color: Colors.black,
-          //       ),
-          //     ),
-          //     trailing: Text(
-          //       "7 DT",
-          //       style: TextStyle(
-          //         fontWeight: FontWeight.w600,
-          //         fontSize: 16,
-          //         color: Colors.black,
-          //       ),
-          //     ),
-          //   ),
-          // ),
+            );
+          }).toList(),
         ],
       ),
     );

@@ -1,17 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/food.dart';
+import 'package:klitchyresto/screens/foods/view_food.dart';
 
 class FoodItem extends StatelessWidget {
   final Food food;
 
-  const FoodItem({Key? key, required this.food}) : super(key: key);
+  const FoodItem({
+    required this.food,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(food.name),
-      subtitle: Text(food.description),
-      trailing: Text(food.price.toString()),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => ViewFoodScreen(
+              food: food,
+            ),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(18, 0, 18, 10),
+        child: Card(
+          elevation: 2,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(17),
+                  child: Container(
+                    height: 76.0,
+                    width: 76,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              AppConstants.serverUrl + food.imgurl),
+                        ),
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          food.name,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              food.price.toStringAsFixed(2) + ' DT',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.star,
+                                    size: 15, color: Colors.orange),
+                                Icon(Icons.star,
+                                    size: 15, color: Colors.orange),
+                                Icon(Icons.star,
+                                    size: 15, color: Colors.orange),
+                                Icon(Icons.star_border,
+                                    size: 15, color: Colors.orange),
+                                Icon(Icons.star_border,
+                                    size: 15, color: Colors.orange),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

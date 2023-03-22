@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/app_constants.dart';
+import 'package:klitchyapp/models/food.dart';
 
 class CategoryFoodItem extends StatelessWidget {
-  final String productUrl, productName, productPrice, productRate;
+  final Food food;
 
   CategoryFoodItem({
-    required this.productUrl,
-    required this.productName,
-    required this.productPrice,
-    required this.productRate,
+    required this.food,
   });
 
   @override
@@ -30,7 +29,9 @@ class CategoryFoodItem extends StatelessWidget {
                   width: 76,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(productUrl), fit: BoxFit.cover),
+                          image: NetworkImage(
+                              AppConstants.serverUrl + food.imgurl),
+                          fit: BoxFit.cover),
                       borderRadius: BorderRadius.circular(16)),
                 ),
               ),
@@ -41,7 +42,7 @@ class CategoryFoodItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        productName,
+                        food.name,
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700,
@@ -54,7 +55,7 @@ class CategoryFoodItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '$productPrice DT',
+                            '${food.price} DT',
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w700,

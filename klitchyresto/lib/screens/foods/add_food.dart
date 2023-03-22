@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/models/category.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +24,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   List<XFile> _imageFileList = [];
 
   bool isLoading = false;
+
+  Category? dropdownvalue;
+  List<Category> categories = [];
 
   Future getImageMulti() async {
     try {
@@ -59,6 +63,12 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     namecontroller.dispose();
 
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    categories = Provider.of<DataProvider>(context, listen: false).categories;
   }
 
   Widget _previewImages() {
@@ -152,6 +162,28 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  DropdownButton<Category>(
+                    // Initial Value
+                    value: dropdownvalue,
+
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    hint: Text("Choose Category"),
+                    // Array list of items
+                    items: categories.map((Category items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items.name),
+                      );
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (Category? newValue) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                      });
+                    },
+                  ),
 
                   Padding(
                     padding: const EdgeInsets.only(left: 20),
@@ -213,7 +245,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                   _imageFileList.first,
                                   namecontroller.text,
                                   pricecontroller.text,
-                                  "23");
+                                  dropdownvalue!.id);
                           await Provider.of<DataProvider>(context,
                                   listen: false)
                               .getFoods();

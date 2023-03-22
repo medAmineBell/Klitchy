@@ -30,6 +30,6 @@ class Order {
     foodId = json["foodId"].toString();
     clientId = json["clientId"].toString();
     restoId = json["restoId"].toString();
-    tableId = json["tableId"].toString();
+    tableId = json["tableRestoId"].toString();
   }
 }

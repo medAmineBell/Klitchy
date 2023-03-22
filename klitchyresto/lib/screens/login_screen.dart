@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/providers/data_provider.dart';
+import 'package:klitchyresto/screens/orders/orders_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,18 +13,26 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController telcontroller = TextEditingController();
+  TextEditingController passcontroller = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    telcontroller.dispose();
+    passcontroller.dispose();
     namecontroller.dispose();
   }
 
-  bool _validtel = false;
+  bool _validpass = false;
   bool _validname = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    namecontroller.text = "planb";
+    passcontroller.text = "azerty";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     //   color: Colors.white,
                     // ),
                     decoration: InputDecoration(
-                      labelText: 'Nom et prénom',
+                      labelText: 'Username',
                       prefixIcon: Icon(
                         Icons.person_outline,
                         color: Theme.of(context).primaryColor,
@@ -96,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelStyle: TextStyle(
                         color: Colors.black,
                       ),
-                      errorText: _validname ? 'Nom et prénom vide !' : null,
+                      errorText: _validname ? 'Username empty !' : null,
                       contentPadding:
                           EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                       // border: OutlineInputBorder(
@@ -107,23 +117,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
-                    keyboardType: TextInputType.phone,
-                    autofocus: false,
-                    controller: telcontroller,
+                    keyboardType: TextInputType.text,
+                    autofocus: false, obscureText: true,
+                    controller: passcontroller,
                     // style: TextStyle(
                     //   color: Colors.white,
                     // ),
                     decoration: InputDecoration(
-                      labelText: 'Téléphone',
+                      labelText: 'Password',
                       prefixIcon: Icon(
-                        Icons.phone,
+                        Icons.lock_outline,
                         color: Theme.of(context).primaryColor,
                       ),
 
                       labelStyle: TextStyle(
                         color: Colors.black,
                       ),
-                      errorText: _validtel ? 'Téléphone vide !' : null,
+                      errorText: _validpass ? 'Password empty !' : null,
                       contentPadding:
                           EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                       // border: OutlineInputBorder(
@@ -138,33 +148,39 @@ class _LoginScreenState extends State<LoginScreen> {
               child: InkWell(
                 onTap: () async {
                   setState(() {
-                    telcontroller.text.isEmpty
-                        ? _validtel = true
-                        : _validtel = false;
+                    passcontroller.text.isEmpty
+                        ? _validpass = true
+                        : _validpass = false;
                     namecontroller.text.isEmpty
                         ? _validname = true
                         : _validname = false;
                   });
-                  if (telcontroller.text.isNotEmpty &&
+                  if (passcontroller.text.isNotEmpty &&
                       namecontroller.text.isNotEmpty) {
-                    // await Provider.of<DataProvider>(context, listen: false)
-                    //     .addClient(telcontroller.text, namecontroller.text);
-                    // if (widget.isOwner) {
-                    //   await Provider.of<DataProvider>(context, listen: false)
-                    //       .setOwner();
-                    //   Navigator.of(context).pushReplacement(
-                    //     MaterialPageRoute(
-                    //       builder: (BuildContext context) =>
-                    //           RestaurantPreviewScreen(),
-                    //     ),
-                    //   );
-                    // } else {
-                    //   Navigator.of(context).pushReplacement(
-                    //     MaterialPageRoute(
-                    //       builder: (BuildContext context) => PendingScreen(),
-                    //     ),
-                    //   );
-                    // }
+                    final isLogin = await Provider.of<DataProvider>(context,
+                            listen: false)
+                        .loginResto(namecontroller.text, passcontroller.text);
+                    if (isLogin) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => OrdersScreen(),
+                        ),
+                      );
+                    } else {
+                      final snackBar = SnackBar(
+                        content: const Text(
+                          'Wrong login info',
+                          textAlign: TextAlign.center,
+                        ),
+                        backgroundColor: Color(0xFF006C81),
+                        // action: SnackBarAction(
+                        //   textColor: Colors.white,
+                        //   label: 'Hide',
+                        //   onPressed: () {},
+                        // ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   }
                 },
                 child: Container(

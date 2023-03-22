@@ -77,8 +77,9 @@ class _PendingScreenState extends State<PendingScreen> {
               onTap: () async {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        RestaurantPreviewScreen(),
+                    builder: (BuildContext context) => RestaurantPreviewScreen(
+                      resto: resto,
+                    ),
                   ),
                 );
               },

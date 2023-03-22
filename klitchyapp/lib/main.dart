@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:klitchyapp/provider/cart_provider.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
-import 'package:klitchyapp/screens/into_screen.dart';
 import 'package:klitchyapp/screens/splash_screen.dart';
 import 'package:klitchyapp/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,6 @@ main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //final token = prefs.getString("token") ?? "";
   final fRun = prefs.getBool("fRun") ?? true;
 
   runApp(

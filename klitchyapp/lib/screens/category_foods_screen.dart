@@ -17,92 +17,15 @@ class CategoryFoodsScreen extends StatefulWidget {
 }
 
 class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
-  final List<Food> popularFoods = [
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Tandoori Chicken',
-        price: 96.00,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/food.jpeg"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Salmon',
-        price: 40.50,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-002.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Rice and meat',
-        price: 130.50,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-003.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Vegan food',
-        price: 40.00,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-007.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Rich food',
-        price: 140.00,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-006.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Tandoori Chicken',
-        price: 96.00,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-001.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Salmon',
-        price: 40.50,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-002.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Rice and meat',
-        price: 130.50,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-003.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Vegan food',
-        price: 40.00,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-007.png"),
-    Food(
-        id: "1",
-        categoryId: "1",
-        name: 'Rich food',
-        price: 140.00,
-        description: "Chicken Chicken Chicken Chicken",
-        restoId: "1",
-        imgurl: "images/plate-006.png"),
-  ];
+  List<Food> categoryFoods = [];
 
   @override
   void initState() {
     super.initState();
+    categoryFoods = Provider.of<DataProvider>(context, listen: false)
+        .foods
+        .where((element) => element.categoryId == widget.category.id)
+        .toList();
   }
 
   @override
@@ -130,7 +53,7 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 0, 20),
               child: Text(
-                'Showing ${popularFoods.length} foods',
+                'Showing ${categoryFoods.length} foods',
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -140,9 +63,9 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: popularFoods.length,
+                itemCount: categoryFoods.length,
                 itemBuilder: (context, index) {
-                  Food product = popularFoods[index];
+                  Food product = categoryFoods[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -154,10 +77,7 @@ class _CategoryFoodsScreenState extends State<CategoryFoodsScreen> {
                       );
                     },
                     child: CategoryFoodItem(
-                      productName: product.name,
-                      productPrice: product.price.toString(),
-                      productUrl: product.imgurl,
-                      productRate: "4.9",
+                      food: product,
                     ),
                   );
                 },

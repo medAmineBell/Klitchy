@@ -1,50 +1,28 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
+import 'package:klitchyapp/app_constants.dart';
 import 'package:klitchyapp/models/category.dart';
 import 'package:klitchyapp/models/client.dart';
+import 'package:klitchyapp/models/event.dart';
 import 'package:klitchyapp/models/food.dart';
 import 'package:klitchyapp/models/order.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
+import 'package:klitchyapp/models/userItem.dart';
 
 class DataProvider with ChangeNotifier {
-  final String serverUrl = "http://10.0.2.2:8081";
+  final String serverUrl = AppConstants.serverUrl;
   late TableResto tableResto;
   late Resto resto;
   late Client client;
   late Client owner;
 
-  // Resto resto = Resto(
-  //     id: "1",
-  //     email: "mail",
-  //     username: "username",
-  //     password: "password",
-  //     name: "Plan B",
-  //     phone: "phone",
-  //     imgurl: "imgurl",
-  //     address: "address",
-  //     canOrder: true,
-  //     isActive: true,
-  //     haveEvent: true);
-  // Client client = Client(id: "1", name: "name", phone: "phone");
-  // Client owner = Client(id: "1", name: "name", phone: "phone");
   List<Category> categories = [];
   List<Food> foods = [];
   List<Order> orders = [];
   List<Order> allorders = [];
-
-  // void setTableResto(TableResto table) {
-  //   tableResto = table;
-  // }
-
-  // void setClient(String name, String phone) {
-  //   Client c = Client(name: name, phone: phone);
-  //   client = c;
-  // }
+  List<Event> events = [];
 
   bool isOwner() {
     return client.id == owner.id;
@@ -117,7 +95,8 @@ class DataProvider with ChangeNotifier {
     await http.post(Uri.parse(url), body: {
       "id": tableResto.id,
       "owner": client.id,
-      "listclients": client.id
+      "listclients": client.id,
+      "statuts": "owned"
     });
     owner = client;
   }
@@ -200,7 +179,7 @@ class DataProvider with ChangeNotifier {
 
     try {
       final foodData = json.decode(response.body) as List<dynamic>;
-      print(foodData);
+
       if (foodData != null) {
         foods = [];
         foodData.forEach((element) {
@@ -272,6 +251,7 @@ class DataProvider with ChangeNotifier {
       if (orderData != null) {
         orders = [];
         allorders = [];
+
         orderData.forEach((element) {
           final order = Order.fromJson(element);
           allorders.add(order);
@@ -279,6 +259,115 @@ class DataProvider with ChangeNotifier {
           if (tableResto.id == order.tableId && order.status != "Completed") {
             orders.add(order);
           }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    //await getListTableUsers();
+    notifyListeners();
+  }
+
+  Future<void> payOrder(String orderId) async {
+    final url = serverUrl + '/api/orders/$orderId';
+
+    try {
+      await http.put(Uri.parse(url), body: {
+        "status": "Completed",
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<Map<String, UserItem>> getListTableUsers(List<Order> orders) async {
+    Map<String, UserItem> listTableUsers = {};
+
+    for (var order in orders) {
+      var name = await getClientName(order.clientId);
+
+      listTableUsers.update(order.clientId, (existingUserItem) {
+        existingUserItem.orders.add(order);
+
+        return UserItem(
+          name: existingUserItem.name,
+          orders: existingUserItem.orders,
+          total: existingUserItem.total + order.total,
+        );
+      }, ifAbsent: () {
+        List<Order> emptyOrders = [];
+
+        return UserItem(
+          name: name,
+          orders: emptyOrders,
+          total: order.total,
+        );
+      });
+    }
+
+    // orders.forEach((order) async {
+    //   //final name = await getClientName(order.clientId);
+
+    //   listTableUsers.update(order.clientId, (existingUserItem) {
+    //     existingUserItem.orders.add(order);
+
+    //     return UserItem(
+    //       name: existingUserItem.name,
+    //       orders: existingUserItem.orders,
+    //       total: existingUserItem.total + order.total,
+    //     );
+    //   }, ifAbsent: () {
+    //     List<Order> emptyOrders = [];
+
+    //     return UserItem(
+    //       name: "name",
+    //       orders: emptyOrders,
+    //       total: order.total,
+    //     );
+    //   });
+    // });
+
+    return listTableUsers;
+    //notifyListeners();
+  }
+
+  Future<String> getClientName(String id) async {
+    String name = "";
+    final url = serverUrl + '/api/clients/$id';
+
+    final response = await http.get(Uri.parse(url));
+
+    try {
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+
+      final clientData = extractedData['client'];
+
+      if (clientData != null) {
+        final cc = Client.fromJson(clientData);
+        name = cc.name;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return name;
+  }
+
+  //Events
+  Future<void> getEvents() async {
+    final url = '$serverUrl/api/events/resto/${resto.id}';
+
+    final response = await http.get(
+      Uri.parse(url),
+    );
+
+    try {
+      final eventData = json.decode(response.body) as List<dynamic>;
+
+      if (eventData != null) {
+        events = [];
+        eventData.forEach((element) {
+          final food = Event.fromJson(element);
+          events.add(food);
         });
       }
     } catch (e) {
