@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyapp/models/client.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/cart_screen.dart';
 import 'package:klitchyapp/screens/events/events_screen.dart';
 import 'package:klitchyapp/screens/profile_screen.dart';
 import 'package:klitchyapp/screens/resto_screen.dart';
 import 'package:klitchyapp/screens/table_screen.dart';
 import 'package:klitchyapp/widgets/fab_bottom_app_bar.dart';
+import 'package:klitchyapp/widgets/request_joinTable.dart';
+import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeScreen extends StatefulWidget {
+  final int index;
+
+  const HomeScreen({super.key, required this.index});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -14,11 +22,46 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var currentIndex = 0;
   late PageController pageController;
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
+    final isOwner = Provider.of<DataProvider>(context, listen: false).isOwner();
+    socket = Provider.of<DataProvider>(context, listen: false).socket;
+    if (socket.disconnected) {
+      Provider.of<DataProvider>(context, listen: false).connectToSocket();
+    }
+    if (isOwner) {
+      socket.on('JoinTable', (data) {
+        print(data);
+        final tableId =
+            Provider.of<DataProvider>(context, listen: false).tableResto.id;
+        final socketTableId = data["tableId"];
+
+        print("tableid = " + tableId);
+        print("socketTableId = " + socketTableId);
+        print("equal = " + tableId.toString() == socketTableId.toString());
+        if (tableId.toString() == socketTableId.toString()) {
+          final client = Client.fromJson(data["user"]);
+          print("pop the request for : " + client.name);
+          showDialog(
+            context: this.context,
+            builder: (BuildContext context) => RequestJoinTable(
+              client: client,
+            ),
+          ).then((value) {
+            print("res req = $value");
+            Provider.of<DataProvider>(context, listen: false)
+                .responseJoinTable(client, value);
+          });
+        }
+      });
+    }
+    if (widget.index == -1) {
+      _selectedTab(widget.index);
+    }
   }
 
   void changePage(int index) {
@@ -69,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
           size: 35,
         ),
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: FABBottomAppBar(
         color: Colors.white,

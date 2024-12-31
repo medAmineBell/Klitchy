@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/food.dart';
 import 'package:klitchyresto/models/order.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
@@ -121,6 +122,7 @@ class _OrdersHistoryScreenState extends State<OrdersHistoryScreen> {
     return SafeArea(
       child: Scaffold(
         drawer: AppDrawer(),
+        backgroundColor: AppConstants.primaryColorDark1,
         appBar: AppBar(
           title: Text("Orders History"),
         ),

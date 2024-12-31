@@ -109,9 +109,9 @@ class _UpdateEventScreenState extends State<UpdateEventScreen> {
         title: Text(
           'Update event',
         ),
-        backgroundColor: Colors.grey[50],
+        backgroundColor: AppConstants.primaryColorDark1,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
         centerTitle: true,
         actions: [
           IconButton(
@@ -126,7 +126,7 @@ class _UpdateEventScreenState extends State<UpdateEventScreen> {
               ))
         ],
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppConstants.primaryColorDark1,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

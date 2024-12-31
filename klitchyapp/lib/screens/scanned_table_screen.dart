@@ -191,11 +191,30 @@ class _ScannedTableScreenState extends State<ScannedTableScreen> {
                           ),
                         );
                       } else {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => PendingScreen(),
-                          ),
-                        );
+                        final client =
+                            Provider.of<DataProvider>(context, listen: false)
+                                .client;
+                        print("yet3da ?");
+                        print(tableResto.listclients.contains(client.id));
+                        if (tableResto.listclients.contains(client.id)) {
+                          print("direct yet3da");
+
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  RestaurantPreviewScreen(
+                                resto: resto,
+                              ),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PendingScreen(),
+                            ),
+                          );
+                        }
                       }
                     } else {
                       Navigator.of(context).pushReplacement(

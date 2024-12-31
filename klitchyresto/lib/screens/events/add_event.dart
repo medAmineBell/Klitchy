@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' as ff;
 
 class AddEventScreen extends StatefulWidget {
   @override
@@ -19,44 +20,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
   bool _validatdesc = false;
   bool _validatprice = false;
 
-  late Image image;
-
-  final ImagePicker _picker = ImagePicker();
-  List<XFile> _imageFileList = [];
-
   DateTime _date = DateTime.now();
 
   bool isLoading = false;
-
-  Future getImageMulti() async {
-    try {
-      final pickedFileList = await _picker.pickMultiImage();
-      setState(() {
-        pickedFileList.forEach((element) {
-          _imageFileList.add(element);
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future getImageCam() async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-      setState(() {
-        _imageFileList.add(pickedFile!);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void clearImages() {
-    setState(() {
-      _imageFileList.clear();
-    });
-  }
 
   @override
   void dispose() {
@@ -65,29 +31,34 @@ class _AddEventScreenState extends State<AddEventScreen> {
     super.dispose();
   }
 
-  Widget _previewImages() {
-    if (_imageFileList.isNotEmpty) {
-      return Container(
-        height: 170,
-        child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Image.file(File(_imageFileList[index].path)),
-            );
-          },
-          itemCount: _imageFileList.length,
-        ),
-      );
-    } else {
-      return const Text(
-        'You have not yet picked an image.',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.red),
-      );
-    }
+  XFile? _image;
+
+  Image? image;
+
+  Future getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = pickedFile;
+        if (ff.kIsWeb) {
+          image = Image.network(
+            pickedFile.path,
+            width: 300,
+            height: 300,
+          );
+        } else {
+          image = Image.file(
+            File(pickedFile.path),
+            width: 300,
+            height: 300,
+          );
+        }
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 
   @override
@@ -117,7 +88,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   SizedBox(
                     height: 20,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
@@ -187,41 +157,21 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     openDate: DateTime.now(),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Upload Event image',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                                onPressed: getImageCam,
-                                icon: Icon(Icons.camera_alt)),
-                            IconButton(
-                                onPressed: getImageMulti,
-                                icon: Icon(Icons.image)),
-                            IconButton(
-                                onPressed: clearImages,
-                                icon: Icon(Icons.refresh)),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                  ElevatedButton(
+                      onPressed: getImage,
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Choose photo"),
+                      )),
                   SizedBox(
                     height: 20,
                   ),
-                  _previewImages(),
-                  //if (image != null) image,
-
                   if (isLoading)
                     Center(
                       child: CircularProgressIndicator(),
@@ -243,14 +193,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         if (namecontroller.text.isNotEmpty &&
                             desccontroller.text.isNotEmpty &&
                             priceccontroller.text.isNotEmpty &&
-                            _imageFileList.isNotEmpty) {
+                            _image != null) {
                           setState(() {
                             isLoading = true;
                           });
                           await Provider.of<DataProvider>(context,
                                   listen: false)
                               .addEvent(
-                                  _imageFileList.first,
+                                  _image!,
                                   namecontroller.text,
                                   desccontroller.text,
                                   getDateStr(_date),

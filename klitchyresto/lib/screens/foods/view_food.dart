@@ -112,9 +112,9 @@ class _ViewFoodScreenState extends State<ViewFoodScreen> {
         title: Text(
           'Update a food',
         ),
-        backgroundColor: Colors.grey[50],
+        backgroundColor: AppConstants.primaryColorDark1,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
         centerTitle: true,
         actions: [
           IconButton(
@@ -129,7 +129,7 @@ class _ViewFoodScreenState extends State<ViewFoodScreen> {
               ))
         ],
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppConstants.primaryColorDark1,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

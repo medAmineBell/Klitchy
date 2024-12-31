@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/food.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:klitchyresto/screens/foods/add_food.dart';
@@ -27,6 +28,7 @@ class _FoodsScreenState extends State<FoodsScreen> {
     foods = Provider.of<DataProvider>(context).foods;
     return Scaffold(
       drawer: AppDrawer(),
+      backgroundColor: AppConstants.primaryColorDark1,
       appBar: AppBar(
         title: Text("Foods"),
         actions: [

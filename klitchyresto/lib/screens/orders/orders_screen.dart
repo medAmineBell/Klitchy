@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/food.dart';
 import 'package:klitchyresto/models/order.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:klitchyresto/widgets/app_drawer.dart';
 import 'package:klitchyresto/widgets/order_item.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({Key? key}) : super(key: key);
+  OrdersScreen({Key? key}) : super(key: key);
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
@@ -17,23 +19,43 @@ class _OrdersScreenState extends State<OrdersScreen> {
   List<Order> orders = [];
   Map<String, List<Order>> myorders = {};
   List<Food> foods = [];
+  late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
     foods = Provider.of<DataProvider>(context, listen: false).foods;
+    socket = Provider.of<DataProvider>(context, listen: false).socket;
     Provider.of<DataProvider>(context, listen: false).getOrders().then(
       (value) {
         setState(() {
-          getMyOrders();
+          getMyOrders(orders);
         });
       },
     );
+    // socket.on('orderTable', (data) {
+    //   final restoId =
+    //       Provider.of<DataProvider>(context, listen: false).resto.id;
+    //   final socketRestoId = data["restoId"];
+    //   print(restoId);
+    //   print(socketRestoId);
+
+    //   if (restoId.toString() == socketRestoId.toString()) {
+    //     print("inside socket");
+    //     Provider.of<DataProvider>(context, listen: false).getOrders().then(
+    //       (value) {
+    //         setState(() {
+    //           getMyOrders();
+    //         });
+    //       },
+    //     );
+    //   }
+    // });
   }
 
-  void getMyOrders() {
+  void getMyOrders(List<Order> orders) {
     myorders = {};
-    orders.forEach((order) {
+    for (var order in orders) {
       if (myorders.containsKey(order.orderNum)) {
         // change quantity...
         myorders.update(
@@ -53,7 +75,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           },
         );
       }
-    });
+    }
   }
 
   Widget buildOrder(String num, List<Order> orders) {
@@ -64,6 +86,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           children: [
             ListView(
               shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 ...orders.map((order) {
                   final food = foods.firstWhere(
@@ -106,8 +129,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     );
   }
 
-  List<Widget> ordersWidget() {
+  List<Widget> ordersWidget(List<Order> orders) {
     List<Widget> widgets = [];
+    getMyOrders(orders);
     myorders.forEach((key, value) {
       widgets.add(buildOrder(key, value));
     });
@@ -121,6 +145,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return SafeArea(
       child: Scaffold(
         drawer: AppDrawer(),
+        backgroundColor: AppConstants.primaryColorDark1,
         appBar: AppBar(
           title: Text("Orders"),
         ),
@@ -130,7 +155,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               height: MediaQuery.of(context).size.height * 0.8,
               child: ListView(
                 children: [
-                  ...ordersWidget(),
+                  ...ordersWidget(orders),
                 ],
                 shrinkWrap: true,
               ),

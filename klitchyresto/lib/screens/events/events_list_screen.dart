@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/event.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:klitchyresto/screens/events/add_event.dart';
@@ -25,8 +26,10 @@ class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
     events = Provider.of<DataProvider>(context).events;
+
     return Scaffold(
       drawer: AppDrawer(),
+      backgroundColor: AppConstants.primaryColorDark1,
       appBar: AppBar(
         title: Text("Events"),
         actions: [

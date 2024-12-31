@@ -5,6 +5,7 @@ import 'package:klitchyresto/models/category.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' as ff;
 
 class AddFoodScreen extends StatefulWidget {
   @override
@@ -18,43 +19,38 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   bool _validatname = false;
   bool _validatprice = false;
 
-  late Image image;
-  late DateTime _date;
-  final ImagePicker _picker = ImagePicker();
-  List<XFile> _imageFileList = [];
-
   bool isLoading = false;
 
   Category? dropdownvalue;
   List<Category> categories = [];
 
-  Future getImageMulti() async {
-    try {
-      final pickedFileList = await _picker.pickMultiImage();
-      setState(() {
-        pickedFileList.forEach((element) {
-          _imageFileList.add(element);
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  XFile? _image;
 
-  Future getImageCam() async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-      setState(() {
-        _imageFileList.add(pickedFile!);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  Image? image;
 
-  void clearImages() {
+  Future getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     setState(() {
-      _imageFileList.clear();
+      if (pickedFile != null) {
+        _image = pickedFile;
+        if (ff.kIsWeb) {
+          image = Image.network(
+            pickedFile.path,
+            width: 300,
+            height: 300,
+          );
+        } else {
+          image = Image.file(
+            File(pickedFile.path),
+            width: 300,
+            height: 300,
+          );
+        }
+      } else {
+        print('No image selected.');
+      }
     });
   }
 
@@ -69,31 +65,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   void initState() {
     super.initState();
     categories = Provider.of<DataProvider>(context, listen: false).categories;
-  }
-
-  Widget _previewImages() {
-    if (_imageFileList.isNotEmpty) {
-      return Container(
-        height: 170,
-        child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Image.file(File(_imageFileList[index].path)),
-            );
-          },
-          itemCount: _imageFileList.length,
-        ),
-      );
-    } else {
-      return const Text(
-        'You have not yet picked an image.',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.red),
-      );
-    }
   }
 
   @override
@@ -123,7 +94,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                   SizedBox(
                     height: 20,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
@@ -184,40 +154,22 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                       });
                     },
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Upload image',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                                onPressed: getImageCam,
-                                icon: Icon(Icons.camera_alt)),
-                            IconButton(
-                                onPressed: getImageMulti,
-                                icon: Icon(Icons.image)),
-                            IconButton(
-                                onPressed: clearImages,
-                                icon: Icon(Icons.refresh)),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
                   SizedBox(
                     height: 20,
                   ),
-                  _previewImages(),
-                  //if (image != null) image,
-
+                  ElevatedButton(
+                      onPressed: getImage,
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Choose photo"),
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
                   if (isLoading)
                     Center(
                       child: CircularProgressIndicator(),
@@ -235,17 +187,14 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                         });
                         if (namecontroller.text.isNotEmpty &&
                             pricecontroller.text.isNotEmpty &&
-                            _imageFileList != null) {
+                            _image != null) {
                           setState(() {
                             isLoading = true;
                           });
                           await Provider.of<DataProvider>(context,
                                   listen: false)
-                              .addFood(
-                                  _imageFileList.first,
-                                  namecontroller.text,
-                                  pricecontroller.text,
-                                  dropdownvalue!.id);
+                              .addFood(_image!, namecontroller.text,
+                                  pricecontroller.text, dropdownvalue!.id);
                           await Provider.of<DataProvider>(context,
                                   listen: false)
                               .getFoods();

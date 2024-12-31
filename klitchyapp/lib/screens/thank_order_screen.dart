@@ -30,7 +30,9 @@ class _ThankScreenState extends State<ThankScreen> {
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreen(),
+                  builder: (BuildContext context) => HomeScreen(
+                    index: -1,
+                  ),
                 ),
               );
             },

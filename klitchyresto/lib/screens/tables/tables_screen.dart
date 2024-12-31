@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/category.dart';
 import 'package:klitchyresto/models/food.dart';
 import 'package:klitchyresto/models/tableResto.dart';
@@ -33,6 +34,7 @@ class _TablesScreenState extends State<TablesScreen> {
     tableRestos = Provider.of<DataProvider>(context).tableRestos;
     return Scaffold(
       drawer: AppDrawer(),
+      backgroundColor: AppConstants.primaryColorDark1,
       appBar: AppBar(
         title: Text("Tables"),
         actions: [

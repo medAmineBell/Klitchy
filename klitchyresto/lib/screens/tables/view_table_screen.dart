@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/tableResto.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:provider/provider.dart';
@@ -37,9 +38,9 @@ class _ViewTableScreenState extends State<ViewTableScreen> {
         title: Text(
           'Update table',
         ),
-        backgroundColor: Colors.grey[50],
+        backgroundColor: AppConstants.primaryColorDark1,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
         centerTitle: true,
         actions: [
           IconButton(
@@ -54,7 +55,7 @@ class _ViewTableScreenState extends State<ViewTableScreen> {
               ))
         ],
       ),
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppConstants.primaryColorDark1,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

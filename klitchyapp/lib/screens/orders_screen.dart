@@ -115,12 +115,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    orders = Provider.of<DataProvider>(context).allorders;
+    orders = Provider.of<DataProvider>(context).orders;
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Orders"),
+          title: const Text("My Orders"),
           centerTitle: true,
           foregroundColor: Colors.black,
           elevation: 0,

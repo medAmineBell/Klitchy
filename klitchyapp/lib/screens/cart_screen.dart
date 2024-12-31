@@ -203,6 +203,8 @@ class _CartScreenState extends State<CartScreen> {
                                     cartItem.food.id);
                           });
                           cart.clear();
+                          Provider.of<DataProvider>(context, listen: false)
+                              .orderTable();
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (BuildContext context) => ThankScreen(),

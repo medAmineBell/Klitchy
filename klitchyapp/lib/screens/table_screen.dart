@@ -7,6 +7,7 @@ import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/models/userItem.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
+import 'package:klitchyapp/widgets/payment_dialog.dart';
 import 'package:klitchyapp/widgets/split_bill.dart';
 import 'package:klitchyapp/widgets/table_order_item.dart';
 import 'package:provider/provider.dart';
@@ -241,6 +242,13 @@ class _TableScreenState extends State<TableScreen> {
                           padding: const EdgeInsets.only(bottom: 50),
                           child: InkWell(
                             onTap: () async {
+                              final payment = await showDialog(
+                                context: this.context,
+                                builder: (BuildContext context) =>
+                                    PaymentDialog(
+                                  amount: total,
+                                ),
+                              );
                               final result = await showDialogAlert(
                                 context: context,
                                 title: 'Pay All',
@@ -252,7 +260,7 @@ class _TableScreenState extends State<TableScreen> {
                                 for (var order in orders) {
                                   await Provider.of<DataProvider>(context,
                                           listen: false)
-                                      .payOrder(order.id);
+                                      .payOrder(order.id, payment);
                                 }
                               }
                             },

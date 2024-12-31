@@ -131,7 +131,9 @@ class RestaurantPreviewScreen extends StatelessWidget {
 
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => HomeScreen(),
+                        builder: (BuildContext context) => HomeScreen(
+                          index: -1,
+                        ),
                       ),
                     );
                   },

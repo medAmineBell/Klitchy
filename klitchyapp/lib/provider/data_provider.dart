@@ -10,9 +10,11 @@ import 'package:klitchyapp/models/order.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/models/userItem.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class DataProvider with ChangeNotifier {
   final String serverUrl = AppConstants.serverUrl;
+  late IO.Socket socket;
   late TableResto tableResto;
   late Resto resto;
   late Client client;
@@ -26,6 +28,54 @@ class DataProvider with ChangeNotifier {
 
   bool isOwner() {
     return client.id == owner.id;
+  }
+
+  DataProvider() {
+    connectToSocket();
+  }
+
+  void requestJoinTable() {
+    if (socket.disconnected) {
+      connectToSocket();
+    }
+    socket
+        .emit('JoinTable', {"user": client.toJson(), "tableId": tableResto.id});
+  }
+
+  void orderTable() {
+    if (socket.disconnected) {
+      connectToSocket();
+    }
+    socket.emit('orderTable', {"restoId": resto.id});
+  }
+
+  void responseJoinTable(Client c, bool isAllowed) {
+    if (socket.disconnected) {
+      connectToSocket();
+    }
+    socket.emit('JoinTable_response',
+        {"user": c.toJson(), "tableId": tableResto.id, "isAllowed": isAllowed});
+  }
+
+  void connectToSocket() {
+    try {
+      // Configure socket transports must be sepecified
+      socket = IO.io(AppConstants.socketUrl, <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': true,
+      });
+
+      // Connect to websocket
+      socket.connect();
+
+      // Handle socket events
+      socket.on('connect', (_) => print('connect: ${socket.id}'));
+      socket.on('connect_error', (e) => print(e));
+      socket.on('disconnect', (_) => print('disconnect'));
+      socket.on('fromServer', (_) => print(_));
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   //Resto
@@ -92,6 +142,9 @@ class DataProvider with ChangeNotifier {
   Future<void> setOwner() async {
     final url = serverUrl + '/api/tableRestos/setOwner';
 
+    // List<String> listClients = [];
+    // listClients.add(client.id);
+
     await http.post(Uri.parse(url), body: {
       "id": tableResto.id,
       "owner": client.id,
@@ -99,6 +152,23 @@ class DataProvider with ChangeNotifier {
       "statuts": "owned"
     });
     owner = client;
+  }
+
+  Future<void> addClientToTable() async {
+    final url = serverUrl + '/api/tableRestos/setOwner';
+
+    // List<String> listClients = [];
+    // listClients.add(client.id);
+    String listc = "";
+    for (var element in tableResto.listclients) {
+      listc += element + ",";
+    }
+    listc += client.id;
+//
+    await http.post(Uri.parse(url), body: {
+      "id": tableResto.id,
+      "listclients": listc,
+    });
   }
 
   //Client
@@ -232,6 +302,7 @@ class DataProvider with ChangeNotifier {
         "tableRestoId": tableResto.id,
         "clientId": client.id,
         "restoId": resto.id,
+        "paymentMethod": "",
       });
     } catch (e) {
       print(e.toString());
@@ -255,9 +326,10 @@ class DataProvider with ChangeNotifier {
         orderData.forEach((element) {
           final order = Order.fromJson(element);
           allorders.add(order);
-
           if (tableResto.id == order.tableId && order.status != "Completed") {
-            orders.add(order);
+            if (order.clientId == client.id) {
+              orders.add(order);
+            }
           }
         });
       }
@@ -268,12 +340,13 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> payOrder(String orderId) async {
+  Future<void> payOrder(String orderId, String paymentMethod) async {
     final url = serverUrl + '/api/orders/$orderId';
 
     try {
       await http.put(Uri.parse(url), body: {
         "status": "Completed",
+        "paymentMethod": paymentMethod,
       });
     } catch (e) {
       print(e.toString());

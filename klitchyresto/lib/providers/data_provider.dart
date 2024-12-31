@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:klitchyresto/app_constants.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -11,8 +12,9 @@ import 'package:klitchyresto/models/resto.dart';
 import 'package:klitchyresto/models/tableResto.dart';
 
 class DataProvider with ChangeNotifier {
-  final String serverUrl = "http://10.0.2.2:8081";
+  final String serverUrl = AppConstants.serverUrl;
   late TableResto tableResto;
+  late IO.Socket socket;
 
   List<Order> orders = [];
   List<Order> allorders = [];
@@ -33,6 +35,39 @@ class DataProvider with ChangeNotifier {
   //   Client c = Client(name: name, phone: phone);
   //   client = c;
   // }
+
+  DataProvider() {
+    connectToSocket();
+    socket.on('orderTable', (data) {
+      final restoId = resto.id;
+      final socketRestoId = data["restoId"];
+
+      if (restoId.toString() == socketRestoId.toString()) {
+        getOrders();
+      }
+    });
+  }
+
+  void connectToSocket() {
+    try {
+      // Configure socket transports must be sepecified
+      socket = IO.io(AppConstants.socketUrl, <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': true,
+      });
+
+      // Connect to websocket
+      socket.connect();
+
+      // Handle socket events
+      socket.on('connect', (_) => print('connect: ${socket.id}'));
+      socket.on('connect_error', (e) => print(e));
+      socket.on('disconnect', (_) => print('disconnect'));
+      socket.on('fromServer', (_) => print(_));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   //Resto
 
@@ -120,8 +155,6 @@ class DataProvider with ChangeNotifier {
       Uri.parse(url),
     );
 
-    print(response.body);
-
     try {
       final categoryData = json.decode(response.body) as List<dynamic>;
 
@@ -172,7 +205,7 @@ class DataProvider with ChangeNotifier {
 
     try {
       final foodData = json.decode(response.body) as List<dynamic>;
-      print(foodData);
+
       if (foodData != null) {
         foods = [];
         foodData.forEach((element) {
@@ -403,5 +436,24 @@ class DataProvider with ChangeNotifier {
       print(e.toString());
     }
     await getFoods();
+  }
+
+  Future<void> addOrder(double total, String orderNum, int qty, String foodId,
+      String tableId) async {
+    final url = serverUrl + '/api/orders';
+
+    try {
+      await http.post(Uri.parse(url), body: {
+        "total": total.toStringAsFixed(2),
+        "orderNum": orderNum,
+        "qty": qty.toString(),
+        "foodId": foodId,
+        "tableRestoId": tableId,
+        "clientId": "0",
+        "restoId": resto.id,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

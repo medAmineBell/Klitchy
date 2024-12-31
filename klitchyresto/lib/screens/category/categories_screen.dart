@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klitchyresto/app_constants.dart';
 import 'package:klitchyresto/models/category.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
 import 'package:klitchyresto/screens/category/add_category_screen.dart';
@@ -27,6 +28,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     categories = Provider.of<DataProvider>(context).categories;
     return Scaffold(
       drawer: AppDrawer(),
+      backgroundColor: AppConstants.primaryColorDark1,
       appBar: AppBar(
         title: Text("Categories"),
         actions: [

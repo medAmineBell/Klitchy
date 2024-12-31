@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:klitchyapp/models/food.dart';
+import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/cart_provider.dart';
+import 'package:klitchyapp/provider/data_provider.dart';
 import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/widgets/custom_header.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,14 @@ class AddToCartScreen extends StatefulWidget {
 
 class _AddToCartScreenState extends State<AddToCartScreen> {
   int quantity = 1;
+
+  late TableResto tableResto;
+
+  @override
+  void initState() {
+    super.initState();
+    tableResto = Provider.of<DataProvider>(context, listen: false).tableResto;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,6 +235,16 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                               elevation: 4,
                               color: Colors.white,
                               child: ListTile(
+                                onTap: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          HomeScreen(
+                                        index: 1,
+                                      ),
+                                    ),
+                                  );
+                                },
                                 leading: Icon(
                                   Icons.table_restaurant_outlined,
                                   size: 40,
@@ -239,7 +259,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                   ),
                                 ),
                                 subtitle: Text(
-                                  "Table AB",
+                                  tableResto.name,
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                     fontSize: 16,
@@ -268,7 +288,9 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        HomeScreen(),
+                                        HomeScreen(
+                                      index: -1,
+                                    ),
                                   ),
                                 );
                               },
@@ -284,7 +306,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
-                                      "ORDER",
+                                      "Add to Cart",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,

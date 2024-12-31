@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:klitchyresto/providers/data_provider.dart';
-import 'package:klitchyresto/screens/orders/orders_screen.dart';
+import 'package:klitchyresto/screens/pos/pos_screen.dart';
+
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -28,10 +30,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     namecontroller.text = "planb";
     passcontroller.text = "azerty";
+    SharedPreferences.getInstance().then((prefs) {
+      String username = prefs.getString("username") ?? "";
+      String pass = prefs.getString("pass") ?? "";
+      if (username.isNotEmpty && pass.isNotEmpty) {
+        Provider.of<DataProvider>(context, listen: false)
+            .loginResto(namecontroller.text, passcontroller.text)
+            .then((isLogin) {
+          if (isLogin) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => POSScreen(),
+              ),
+            );
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -161,9 +179,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             listen: false)
                         .loginResto(namecontroller.text, passcontroller.text);
                     if (isLogin) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString("username", namecontroller.text);
+                      prefs.setString("pass", passcontroller.text);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (BuildContext context) => OrdersScreen(),
+                          builder: (BuildContext context) => POSScreen(),
                         ),
                       );
                     } else {

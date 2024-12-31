@@ -67,41 +67,43 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
                     margin: EdgeInsets.all(8),
                     child: TextButton(
                       onPressed: () async {
-                        final tableResto = await Provider.of<DataProvider>(
-                                context,
-                                listen: false)
-                            .getTableByQrCode("1234");
+                        controller!.pauseCamera();
+                        Navigator.of(context).pop();
+                        // final tableResto = await Provider.of<DataProvider>(
+                        //         context,
+                        //         listen: false)
+                        //     .getTableByQrCode("1220236319718");
 
-                        if (tableResto == null) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  NoTableScreen(),
-                            ),
-                          );
-                        } else {
-                          // Navigator.of(context).pushReplacement(
-                          //   MaterialPageRoute(
-                          //     builder: (BuildContext context) => HomeScreen(),
-                          //   ),
-                          // );
+                        // if (tableResto == null) {
+                        //   Navigator.of(context).pushReplacement(
+                        //     MaterialPageRoute(
+                        //       builder: (BuildContext context) =>
+                        //           NoTableScreen(),
+                        //     ),
+                        //   );
+                        // } else {
+                        //   // Navigator.of(context).pushReplacement(
+                        //   //   MaterialPageRoute(
+                        //   //     builder: (BuildContext context) => HomeScreen(),
+                        //   //   ),
+                        //   // );
 
-                          if (tableResto.owner.isEmpty) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    OpenTableScreen(),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ScannedTableScreen(),
-                              ),
-                            );
-                          }
-                        }
+                        //   if (tableResto.owner.isEmpty) {
+                        //     Navigator.of(context).pushReplacement(
+                        //       MaterialPageRoute(
+                        //         builder: (BuildContext context) =>
+                        //             OpenTableScreen(),
+                        //       ),
+                        //     );
+                        //   } else {
+                        //     Navigator.of(context).pushReplacement(
+                        //       MaterialPageRoute(
+                        //         builder: (BuildContext context) =>
+                        //             ScannedTableScreen(),
+                        //       ),
+                        //     );
+                        //   }
+                        //}
                       },
                       child: Text(
                         "Annuler",
@@ -138,24 +140,52 @@ class _BarecodeScanScreenState extends State<BarecodeScanScreen> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(
+    QRViewController controller,
+  ) {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       if (scanData != null) {
         controller.pauseCamera();
-        // if (scanData.code.contains("https://kmandi-app.tn/menu_digital/")) {
-        //   _launchURL(scanData.code);
-        // } else {
-        //   Provider.of<CompanyProvider>(context, listen: false)
-        //       .fetchAndSetCompanyFromAPI(scanData.code)
-        //       .then((value) {
-        //     Navigator.of(context).pushNamed(WelcomePage.routeName);
-        //   });
-        // }
+        {
+          final tableResto =
+              await Provider.of<DataProvider>(context, listen: false)
+                  .getTableByQrCode(scanData.code!);
+
+          if (tableResto == null) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => NoTableScreen(),
+              ),
+            );
+          } else {
+            // Navigator.of(context).pushReplacement(
+            //   MaterialPageRoute(
+            //     builder: (BuildContext context) => HomeScreen(),
+            //   ),
+            // );
+
+            if (tableResto.owner.isEmpty) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => OpenTableScreen(),
+                ),
+              );
+            } else {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => ScannedTableScreen(),
+                ),
+              );
+            }
+          }
+        }
       }
     });
+    controller.pauseCamera();
+    controller.resumeCamera();
   }
 
   @override

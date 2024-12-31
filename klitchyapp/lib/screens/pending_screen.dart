@@ -3,10 +3,10 @@ import 'package:klitchyapp/models/client.dart';
 import 'package:klitchyapp/models/resto.dart';
 import 'package:klitchyapp/models/tableResto.dart';
 import 'package:klitchyapp/provider/data_provider.dart';
-import 'package:klitchyapp/screens/home_screen.dart';
 import 'package:klitchyapp/screens/into_screen.dart';
 import 'package:klitchyapp/screens/restaurant_preview_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class PendingScreen extends StatefulWidget {
   const PendingScreen({Key? key}) : super(key: key);
@@ -18,14 +18,55 @@ class PendingScreen extends StatefulWidget {
 class _PendingScreenState extends State<PendingScreen> {
   late Resto resto;
   late TableResto tableResto;
-  late Client owner;
+  late IO.Socket socket;
+  late Client client;
+
+  @override
+  void dispose() {
+    super.dispose();
+    socket.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     resto = Provider.of<DataProvider>(context, listen: false).resto;
     tableResto = Provider.of<DataProvider>(context, listen: false).tableResto;
-    owner = Provider.of<DataProvider>(context, listen: false).owner;
+    socket = Provider.of<DataProvider>(context, listen: false).socket;
+    client = Provider.of<DataProvider>(context, listen: false).client;
+    Provider.of<DataProvider>(context, listen: false).requestJoinTable();
+
+    socket.on('JoinTable_response', (data) {
+      final tableId =
+          Provider.of<DataProvider>(context, listen: false).tableResto.id;
+      final socketTableId = data["tableId"];
+      if (tableId.toString() == socketTableId.toString()) {
+        final clientSocket = Client.fromJson(data["user"]);
+        if (client.id == clientSocket.id) {
+          bool isAllowed = data["isAllowed"];
+          print("isAllowed : " + isAllowed.toString());
+          if (isAllowed) {
+            Provider.of<DataProvider>(context, listen: false)
+                .addClientToTable()
+                .then((value) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => RestaurantPreviewScreen(
+                    resto: resto,
+                  ),
+                ),
+              );
+            });
+          } else {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => const IntroScreen(),
+              ),
+            );
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -71,6 +112,13 @@ class _PendingScreenState extends State<PendingScreen> {
               ),
             ],
           ),
+          //CircularProgressIndicator(),
+          InkWell(
+              onTap: () {
+                Provider.of<DataProvider>(context, listen: false)
+                    .requestJoinTable();
+              },
+              child: Icon(Icons.notifications_none, size: 28.0)),
           Padding(
             padding: const EdgeInsets.only(bottom: 50),
             child: InkWell(

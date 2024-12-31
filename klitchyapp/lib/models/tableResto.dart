@@ -1,7 +1,7 @@
 class TableResto {
   late String id;
   late String name;
-  late String listclients;
+  late List<String> listclients;
   late String owner;
   late String qrcode;
   late String status;
@@ -23,7 +23,7 @@ class TableResto {
   TableResto.fromJson(Map<String, dynamic> json) {
     id = json["id"].toString();
     name = json["name"].toString();
-    listclients = json["listclients"].toString();
+    listclients = json["listclients"].toString().split(",");
     owner = json["owner"].toString();
     qrcode = json["qrcode"].toString();
     total = double.parse(json["total"].toString());
